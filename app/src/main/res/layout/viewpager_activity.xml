@@ -11,7 +11,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="495dp"
+        android:layout_height="488dp"
         android:background="#FFFFFF">
 
         <android.support.v4.view.ViewPager
@@ -28,7 +28,7 @@
         android:id="@+id/backplate"
         android:background="@drawable/gradient"
         android:layout_above="@+id/view"
-        android:layout_alignParentStart="true" />
+        android:layout_gravity="center" />
 
 
 
@@ -40,12 +40,12 @@
 
         <me.relex.circleindicator.CircleIndicator
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="13dp"
             app:ci_drawable="@drawable/gray_radius"
             app:ci_drawable_unselected="@drawable/white_circle"
             app:ci_height="5dp"
             app:ci_width="5dp"
-            android:layout_alignParentStart="true"
+            android:gravity="center"
             android:id="@+id/view"
             android:layout_alignParentTop="true" />
         <TextView
