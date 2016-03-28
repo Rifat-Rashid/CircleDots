@@ -11,7 +11,6 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,12 +18,11 @@ import android.widget.TextView;
 import me.relex.circleindicator.CircleIndicator;
 
 public class onLaunch extends AppCompatActivity {
-    private TextView title_Text;
-    private View v;
+
     private Button mLaunchButton;
     ViewPager defaultViewPager;
     private CollectionPagerAdapter adapter;
-    private TextView subText;
+    private TextView terms_of_use_TextView;
     private static final String TERMS_OF_USE_TEXT = "By continuing, you agree to our Terms of Service and Privacy Policy";
 
 
@@ -33,14 +31,14 @@ public class onLaunch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewpager_activity);
 
-        final Typeface FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(this.getAssets(), "fonts/ProximaNova-Regular.otf");
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         } else {
             //to do
+            //find support library that changes status bar color!
         }
+
 
         adapter = new CollectionPagerAdapter(getSupportFragmentManager());
         defaultViewPager = (ViewPager) findViewById(R.id.viewpager_default);
@@ -50,8 +48,9 @@ public class onLaunch extends AppCompatActivity {
         defaultViewPager.setAdapter(adapter);
         defaultIndicator.setViewPager(defaultViewPager);
 
-        subText = (TextView) findViewById(R.id.textView2);
-        subText.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+        final Typeface FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(this.getAssets(), "fonts/ProximaNova-Regular.otf");
+        terms_of_use_TextView = (TextView) findViewById(R.id.textView2);
+        terms_of_use_TextView.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
 
         //Change color of "Terms of Service" and "Privacy Policy" to a dark gray
         Spannable WordtoSpan = new SpannableString(TERMS_OF_USE_TEXT);
@@ -64,18 +63,20 @@ public class onLaunch extends AppCompatActivity {
                 TERMS_OF_USE_TEXT.indexOf("Privacy"),
                 TERMS_OF_USE_TEXT.indexOf("Privacy") + new String("Privacy Policy").length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        subText.setText(WordtoSpan);
+        terms_of_use_TextView.setText(WordtoSpan);
 
+
+
+    }
+
+    private int[] getDisplayMetrics(){
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
         double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
-        double screenInches = Math.sqrt(x + y);
-        Log.d("debug", "Screen inches : " + screenInches);
-        System.out.println("Screen inches : " + screenInches);
-
-        screenInches = (double) Math.round(screenInches * 10) / 10;
-        System.out.println("Screen inches : " + screenInches);
-
+        //double screenInches = Math.sqrt(x + y);
+        //System.out.println("Screen inches : " + screenInches);
+        //screenInches = (double) Math.round(screenInches * 10) / 10;
+        //System.out.println("Screen inches : " + screenInches);
     }
 }
