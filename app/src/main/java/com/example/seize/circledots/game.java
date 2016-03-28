@@ -12,7 +12,7 @@ import android.widget.Button;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
-public class game extends Launcher implements SurfaceHolder.Callback {
+public class game extends onLaunch implements SurfaceHolder.Callback {
 
     private Handler handlerApplication;
     private SurfaceHolder _surfaceHolder;

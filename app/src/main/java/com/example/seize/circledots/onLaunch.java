@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import me.relex.circleindicator.CircleIndicator;
 
-public class Launcher extends AppCompatActivity {
+public class onLaunch extends AppCompatActivity {
     private TextView title_Text;
     private View v;
     private Button mLaunchButton;
