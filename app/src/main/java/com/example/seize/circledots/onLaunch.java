@@ -1,6 +1,8 @@
 package com.example.seize.circledots;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -28,6 +30,8 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
 
     private Button mLaunchButton;
     private GoogleApiClient mGoogleApiClient;
+    private boolean mResolvingError = false;
+    private static final int REQUEST_RESOLVE_ERROR = 1001;
     ViewPager defaultViewPager;
     private CollectionPagerAdapter adapter;
     private TextView terms_of_use_TextView;
@@ -122,16 +126,43 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
 
     @Override
     public void onConnected(Bundle bundle) {
-
+        System.out.println("Connected!");
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (mResolvingError) {
+            return;
+        } else if (connectionResult.hasResolution()) {
+            try {
+                mResolvingError = true;
+                connectionResult.startResolutionForResult(this, REQUEST_RESOLVE_ERROR);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+                //If theres an error try to connect again
+                mGoogleApiClient.connect();
+            }
+        } else {
+            mResolvingError = true;
+        }
+        System.out.println(connectionResult);
+    }
 
+    //Override default onActivityResult...
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_RESOLVE_ERROR) {
+            mResolvingError = false;
+            if (resultCode == RESULT_OK) {
+                if (!mGoogleApiClient.isConnecting() && !mGoogleApiClient.isConnected()) {
+                    mGoogleApiClient.connect();
+                }
+            }
+        }
     }
 }
