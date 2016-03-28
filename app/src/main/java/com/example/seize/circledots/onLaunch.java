@@ -68,15 +68,4 @@ public class onLaunch extends AppCompatActivity {
 
 
     }
-
-    private int[] getDisplayMetrics(){
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
-        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
-        //double screenInches = Math.sqrt(x + y);
-        //System.out.println("Screen inches : " + screenInches);
-        //screenInches = (double) Math.round(screenInches * 10) / 10;
-        //System.out.println("Screen inches : " + screenInches);
-    }
 }

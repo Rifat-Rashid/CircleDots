@@ -1,6 +1,7 @@
 package com.example.seize.circledots;
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.v7.appcompat.*;
 import android.support.v7.appcompat.BuildConfig;
 import android.util.DisplayMetrics;
@@ -72,8 +73,28 @@ public class UserDisplay {
     }
 
     @Override
-    public String toString(){
-        return "";
+    public String toString() {
+        StringBuilder toStringText = new StringBuilder();
+        toStringText.append("Device Manufacturer: " + Build.MANUFACTURER + "\n");
+        toStringText.append("Device Model: " + Build.MODEL + "\n");
+        toStringText.append("Device Dimensions{ \n");
+        double[] temp_measurements_array = getAllDisplayMeasurements();
+        for (int i = 0; i < temp_measurements_array.length; i++) {
+            //are we at the last index?
+            switch (i) {
+                case 0:
+                    toStringText.append("\t Width: " + String.valueOf(temp_measurements_array[i]) + "\n");
+                    break;
+                case 1:
+                    toStringText.append("\t Height: " + String.valueOf(temp_measurements_array[i]) + "\n");
+                    break;
+                case 2:
+                    toStringText.append("\t Diagonal: " + String.valueOf(temp_measurements_array[i]) + "\n");
+                    break;
+            }
+        }
+        toStringText.append("}");
+        return toStringText.toString();
     }
 
 
