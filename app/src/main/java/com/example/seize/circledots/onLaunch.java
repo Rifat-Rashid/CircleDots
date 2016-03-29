@@ -15,6 +15,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -62,8 +63,18 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
             //to do
             //find support library that changes status bar color!
         }
+        final Typeface FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(this.getAssets(), "fonts/ProximaNova-Regular.otf");
 
-
+        mLaunchButton = (Button) findViewById(R.id.button);
+        mLaunchButton.setTransformationMethod(null);
+        mLaunchButton.setText("Sign in with Google+");
+        mLaunchButton.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+        mLaunchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mGoogleApiClient.connect();
+            }
+        });
         adapter = new CollectionPagerAdapter(getSupportFragmentManager());
         defaultViewPager = (ViewPager) findViewById(R.id.viewpager_default);
         defaultViewPager.setOffscreenPageLimit(3);
@@ -72,7 +83,6 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
         defaultViewPager.setAdapter(adapter);
         defaultIndicator.setViewPager(defaultViewPager);
 
-        final Typeface FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(this.getAssets(), "fonts/ProximaNova-Regular.otf");
         terms_of_use_TextView = (TextView) findViewById(R.id.textView2);
         terms_of_use_TextView.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
 
@@ -116,7 +126,6 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
     }
 
     @Override

@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import java.util.logging.Handler;
@@ -18,18 +20,22 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     private SurfaceHolder _surfaceHolder;
     private SurfaceView _surfaceView;
     private GameLoopThread thread;
-    private float position, velocity;
-    private Paint p;
+
     private static final int FRAMES_PER_SECOND = 61;
     private static final float SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-    public static final int BLOCK_SIZE = 150;
     static int FPS_GAME = 61;
     Button b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(0xFFFFFFFF, WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.game);
+
+        _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
+        _surfaceHolder = _surfaceView.getHolder();
+        _surfaceHolder.addCallback(this);
     }
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -139,6 +145,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 try {
                     c = _surfaceHolder.lockCanvas(null);
                     synchronized (_surfaceHolder) {
+                        //physics thread
                         doDraw(c);
                     }
                 } finally {
@@ -148,10 +155,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 }
                 sleepTime = ticksFPS - (System.currentTimeMillis() - startTime);
                 try {
-                    if (sleepTime > 0) {
+                    if (sleepTime >= 0) {
                         sleep(sleepTime);
                     } else {
-                        sleep(10);
+                        //sleep(10);
                     }
                 } catch (Exception e) {
 
@@ -176,6 +183,16 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 canvas.save();
             }
             canvas.restore();
+        }
+    }
+
+    class GamePhysicsThread {
+        public GamePhysicsThread(){
+
+        }
+
+        public void update(){
+
         }
     }
 }

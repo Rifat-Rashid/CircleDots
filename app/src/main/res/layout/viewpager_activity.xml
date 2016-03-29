@@ -18,8 +18,7 @@
             android:id="@+id/viewpager_default"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="1"
-            android:layout_alignParentBottom="true" />
+            android:weightSum="1" />
     </RelativeLayout>
 
     <View
@@ -40,7 +39,7 @@
 
         <me.relex.circleindicator.CircleIndicator
             android:layout_width="match_parent"
-            android:layout_height="13dp"
+            android:layout_height="20dp"
             app:ci_drawable="@drawable/gray_radius"
             app:ci_drawable_unselected="@drawable/white_circle"
             app:ci_height="5dp"
@@ -56,9 +55,9 @@
             android:text="By continuing, you agree to our Terms of Service and Privacy Policy"
             android:id="@+id/textView2"
             android:textSize="10dp"
-            android:padding="6dp"
             android:layout_below="@+id/view"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="15dp" />
 
         <Button
             android:layout_width="300dp"

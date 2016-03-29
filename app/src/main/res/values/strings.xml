@@ -3,4 +3,5 @@
     <string name="firstPageDesc">Match dots with the same color to gain points! </string>
     <string name="secondPageDesc">Compete with your Google+ friends</string>
     <string name="thirdPageDesc">Unlock achievements to recieve Google Game points! </string>
+    <string name="app_id">890177335081</string>
 </resources>
