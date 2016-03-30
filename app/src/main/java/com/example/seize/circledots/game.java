@@ -191,7 +191,8 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         private void doDraw(final Canvas canvas) {
             if (run) {
                 canvas.save();
-                canvas.drawText("FPS: " + String.valueOf(fps_game), 500, 100, new Paint(Color.WHITE));
+                canvas.drawColor(Color.parseColor("#FFFFFF"));
+
             }
             canvas.restore();
         }

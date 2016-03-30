@@ -8,8 +8,10 @@ import android.graphics.Color;
  */
 public interface ColorArrayPallete {
 
-    public Color getColor();
-    public void setColor(Color color);
-    public void generateColor();
+    public int getColor();
+
+    public void setColor(int color);
+
+    public int generateColor();
 
 }
