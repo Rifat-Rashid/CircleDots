@@ -72,7 +72,9 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
         mLaunchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoogleApiClient.connect();
+                //mGoogleApiClient.connect();
+                Intent i = new Intent(onLaunch.this, game.class);
+                startActivity(i);
             }
         });
         adapter = new CollectionPagerAdapter(getSupportFragmentManager());

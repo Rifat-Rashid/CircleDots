@@ -2,6 +2,7 @@ package com.example.seize.circledots;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -19,16 +20,18 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     private Handler handlerApplication;
     private SurfaceHolder _surfaceHolder;
     private SurfaceView _surfaceView;
+    static Paint counter = new Paint(Paint.ANTI_ALIAS_FLAG);
     private GameLoopThread thread;
 
     private static final int FRAMES_PER_SECOND = 61;
     static int FPS_GAME = 61;
     Button b;
+    static int fps_game = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
         getWindow().setFlags(0xFFFFFFFF, WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.game);
 
@@ -120,6 +123,8 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         public void doStart() {
             synchronized (_surfaceHolder) {
                 //load here
+                counter.setColor(Color.parseColor("#b2b2b2"));
+                counter.setTextSize(75);
             }
         }
 
@@ -155,7 +160,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                         _surfaceHolder.unlockCanvasAndPost(c);
                     }
                 }
-                sleepTime = ticksFPS - (System.currentTimeMillis() - startTime);
+                long tempMilli = System.currentTimeMillis();
+                fps_game = (int)(1000/tempMilli);
+                System.out.println(fps_game);
+                sleepTime = ticksFPS - (tempMilli - startTime);
                 try {
                     if (sleepTime >= 0) {
                         sleep(sleepTime);
@@ -183,6 +191,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         private void doDraw(final Canvas canvas) {
             if (run) {
                 canvas.save();
+                canvas.drawText("FPS: " + String.valueOf(fps_game), 500, 100, new Paint(Color.WHITE));
             }
             canvas.restore();
         }
