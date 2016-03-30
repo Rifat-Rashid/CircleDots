@@ -9,7 +9,7 @@ import android.graphics.Color;
 public interface ColorArrayPallete {
 
     public Color getColor();
-    public void setColor();
+    public void setColor(Color color);
     public void generateColor();
 
 }
