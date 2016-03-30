@@ -22,7 +22,6 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     private GameLoopThread thread;
 
     private static final int FRAMES_PER_SECOND = 61;
-    private static final float SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
     static int FPS_GAME = 61;
     Button b;
 
@@ -37,6 +36,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         _surfaceHolder = _surfaceView.getHolder();
         _surfaceHolder.addCallback(this);
     }
+
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         thread = new GameLoopThread(_surfaceHolder, new Handler() {
@@ -109,10 +109,12 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         private int canvasWidth;
         private int canvasHeight;
         private boolean run = false;
+        private GamePhysicsThread gamePhysicsThread;
 
         public GameLoopThread(SurfaceHolder surfaceHolder, Handler handler) {
             _surfaceHolder = surfaceHolder;
             handlerApplication = handler;
+            gamePhysicsThread = new GamePhysicsThread();
         }
 
         public void doStart() {
@@ -145,7 +147,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 try {
                     c = _surfaceHolder.lockCanvas(null);
                     synchronized (_surfaceHolder) {
-                        //physics thread
+                        gamePhysicsThread.update();
                         doDraw(c);
                     }
                 } finally {
@@ -187,11 +189,11 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     }
 
     class GamePhysicsThread {
-        public GamePhysicsThread(){
+        public GamePhysicsThread() {
 
         }
 
-        public void update(){
+        public void update() {
 
         }
     }
