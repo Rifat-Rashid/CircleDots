@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="colors">
+    <array name="colors_Array">
         <item>#2ecc71</item>
+        <item>#95a5a6</item>
         <item>#3498db</item>
         <item>#e74c3c</item>
+        <item>#9b59b6</item>
         <item>#e67e22</item>
+        <item>#34495e</item>
         <item>#f1c40f</item>
         <item>#1abc9c</item>
+
 
     </array>
 </resources>

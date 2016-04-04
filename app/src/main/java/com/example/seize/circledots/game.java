@@ -22,6 +22,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     private SurfaceView _surfaceView;
     static Paint counter = new Paint(Paint.ANTI_ALIAS_FLAG);
     private GameLoopThread thread;
+    public DotsGrid mDotsGrid;
 
     private static final int FRAMES_PER_SECOND = 61;
     static int FPS_GAME = 61;
@@ -125,6 +126,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 //load here
                 counter.setColor(Color.parseColor("#b2b2b2"));
                 counter.setTextSize(75);
+                mDotsGrid = new DotsGrid(canvasWidth, canvasHeight, 85, getApplicationContext());
             }
         }
 
@@ -162,7 +164,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 }
                 long tempMilli = System.currentTimeMillis();
                 fps_game = (int)(1000/tempMilli);
-                System.out.println(fps_game);
+                //System.out.println(fps_game);
                 sleepTime = ticksFPS - (tempMilli - startTime);
                 try {
                     if (sleepTime >= 0) {
@@ -192,7 +194,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             if (run) {
                 canvas.save();
                 canvas.drawColor(Color.parseColor("#FFFFFF"));
-
+                mDotsGrid.Draw(canvas);
             }
             canvas.restore();
         }

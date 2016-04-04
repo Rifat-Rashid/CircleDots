@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.ColorInt;
 
 import java.util.Random;
 
@@ -34,8 +35,9 @@ public class Dot implements ColorArrayPallete, ObjectCoordinates {
     public void setUpPaintStack(){
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mPaint.setAntiAlias(true);
-        this.mPaint.setStyle(Paint.Style.FILL);
+        System.out.println(generateColor());
         this.mPaint.setColor(generateColor());
+        this.mPaint.setStyle(Paint.Style.FILL);
     }
 
     public void Draw(Canvas canvas){
@@ -54,12 +56,12 @@ public class Dot implements ColorArrayPallete, ObjectCoordinates {
 
     @Override
     public int generateColor() {
-        TypedArray mTypedArray = this.context.getResources().obtainTypedArray(R.array.colors);
+        TypedArray mTypedArray = this.context.getResources().obtainTypedArray(R.array.colors_Array);
         int[] colors = new int[mTypedArray.length()];
         Random r = new Random();
-        int tempColor = colors[(r.nextInt()*mTypedArray.length())];
-        mTypedArray.recycle();
-        return tempColor;
+       // int tempColor = colors[(r.nextInt()*mTypedArray.length())];
+        //mTypedArray.recycle();
+        return mTypedArray.getColor((r.nextInt(mTypedArray.length())), 0);
     }
 
     @Override
