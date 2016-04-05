@@ -10,7 +10,7 @@ public class DotsGrid {
     private Dot mDot;
     private int screenWidth, screenHeight, dotRadius;
     private Context mContext;
-    private Dot[][] dots_grid = new Dot[10][5];
+    private Dot[][] dots_grid = new Dot[6][6];
 
     public DotsGrid() {
 
@@ -25,17 +25,15 @@ public class DotsGrid {
     }
 
     public void createField(){
-
         for(int i = 0; i < dots_grid.length; i++){
             for(int j = 0; j <dots_grid[0].length; j++){
-                mDot = new Dot(100+ j*(this.screenWidth - 200)/5, 150 + i*(this.screenHeight - 300)/10, 85, this.mContext);
-                dots_grid[i][j] = mDot;
+                mDot = new Dot(j*(3*screenWidth/5)/5 + screenWidth/5, i*(3*screenWidth/5)/5 + screenHeight/3, (screenWidth/10)/4, this.mContext);
+                 dots_grid[i][j] = mDot;
             }
         }
     }
 
     public void Draw(Canvas canvas){
-        //mDot.Draw(canvas);
         for(int i = 0; i < dots_grid.length; i++){
             for(int j = 0; j < dots_grid[0].length; j++){
                 dots_grid[i][j].Draw(canvas);

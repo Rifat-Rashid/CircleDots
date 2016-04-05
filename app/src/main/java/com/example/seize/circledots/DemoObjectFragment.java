@@ -35,11 +35,29 @@ public class DemoObjectFragment extends Fragment {
                 imageRef = R.drawable.nexus_5_device_base_half1;
                 break;
         }
-        TextView tv = (TextView) rootView.findViewById(R.id.sub_text);
-        tv.setText(getResources().getString(descRef));
-        tv.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
-        ImageView iv = (ImageView) rootView.findViewById(R.id.img);
-        iv.setImageResource(imageRef);
+        if(index != 0){
+            ImageView imga = (ImageView) rootView.findViewById(R.id.applogo_icon);
+            imga.setVisibility(View.INVISIBLE);
+            TextView title = (TextView) rootView.findViewById(R.id.dots_title);
+            title.setVisibility(View.INVISIBLE);
+            TextView tv = (TextView) rootView.findViewById(R.id.sub_text);
+            tv.setVisibility(View.VISIBLE);
+            tv.setText(getResources().getString(descRef));
+            tv.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+            ImageView iv = (ImageView) rootView.findViewById(R.id.img);
+            iv.setVisibility(View.VISIBLE);
+            iv.setImageResource(imageRef);
+        }else{
+            TextView tv = (TextView) rootView.findViewById(R.id.sub_text);
+            tv.setVisibility(View.INVISIBLE);
+            ImageView imga = (ImageView) rootView.findViewById(R.id.applogo_icon);
+            imga.setVisibility(View.VISIBLE);
+            ImageView iv = (ImageView) rootView.findViewById(R.id.img);
+            iv.setVisibility(View.INVISIBLE);
+            TextView title = (TextView) rootView.findViewById(R.id.dots_title);
+            title.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+            title.setVisibility(View.VISIBLE);
+        }
         return rootView;
     }
 }

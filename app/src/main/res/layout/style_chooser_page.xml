@@ -24,4 +24,24 @@
         android:layout_centerHorizontal="true"
         android:padding="25dp"
         android:textAlignment="center" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/applogo_icon"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/front_page_logo"
+        android:scaleType="fitXY"
+        android:background="#00000000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Dots"
+        android:id="@+id/dots_title"
+        android:textSize="35dp"
+        android:layout_above="@+id/applogo_icon"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

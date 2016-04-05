@@ -5,6 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.Region;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,7 +27,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     private SurfaceView _surfaceView;
     static Paint counter = new Paint(Paint.ANTI_ALIAS_FLAG);
     private GameLoopThread thread;
+    public Canvas c;
+    public Bitmap bitmap;
     public DotsGrid mDotsGrid;
+    public Paint eraser;
 
     private static final int FRAMES_PER_SECOND = 61;
     static int FPS_GAME = 61;
@@ -126,6 +134,11 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 //load here
                 counter.setColor(Color.parseColor("#b2b2b2"));
                 counter.setTextSize(75);
+                bitmap = Bitmap.createBitmap(250, 250, Bitmap.Config.ARGB_8888);
+                c = new Canvas(bitmap);
+                eraser = new Paint();
+                eraser.setColor(0xFFFFFFFF);
+                eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
                 mDotsGrid = new DotsGrid(canvasWidth, canvasHeight, 85, getApplicationContext());
             }
         }
@@ -195,6 +208,13 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 canvas.save();
                 canvas.drawColor(Color.parseColor("#FFFFFF"));
                 mDotsGrid.Draw(canvas);
+                bitmap.eraseColor(Color.TRANSPARENT);
+                c.drawColor(Color.BLUE);
+                c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, 50, eraser);
+                canvas.drawBitmap(bitmap, 0, 0, null);
+
+
+
             }
             canvas.restore();
         }
