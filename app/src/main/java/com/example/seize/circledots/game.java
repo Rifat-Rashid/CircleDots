@@ -27,10 +27,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     private SurfaceView _surfaceView;
     static Paint counter = new Paint(Paint.ANTI_ALIAS_FLAG);
     private GameLoopThread thread;
-    public Canvas c;
-    public Bitmap bitmap;
     public DotsGrid mDotsGrid;
-    public Paint eraser;
+    public Player mPlayer;
+    public UserDisplay mUserDisplay;
 
     static int FPS_GAME = 61;
 
@@ -40,6 +39,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(0xFFFFFFFF, WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.game);
+        mUserDisplay = new UserDisplay(this);
 
         _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         _surfaceHolder = _surfaceView.getHolder();
@@ -129,14 +129,11 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         public void doStart() {
             synchronized (_surfaceHolder) {
                 //load here
-                counter.setColor(Color.parseColor("#b2b2b2"));
-                counter.setTextSize(75);
-                bitmap = Bitmap.createBitmap(250, 250, Bitmap.Config.ARGB_8888);
-                c = new Canvas(bitmap);
-                eraser = new Paint();
-                eraser.setColor(0xFFFFFFFF);
-                eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-                mDotsGrid = new DotsGrid(canvasWidth, canvasHeight, 85, getApplicationContext());
+                int dotSize = (canvasWidth/10)/4;
+                int distanceBetweenCircles = (3*canvasWidth/5)/5;
+                mDotsGrid = new DotsGrid(canvasWidth, canvasHeight, dotSize, getApplicationContext());
+                mPlayer = new Player(mDotsGrid.getDotObject(3, 3).getX() - distanceBetweenCircles/2, mDotsGrid.getDotObject(3, 3).getY() - distanceBetweenCircles/2, distanceBetweenCircles, distanceBetweenCircles, dotSize, getApplicationContext());
+                System.out.println(mDotsGrid.getDotObject(3, 5).getX());
             }
         }
 
@@ -173,12 +170,6 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     }
                 }
                 long tempMilli = System.currentTimeMillis();
-                try {
-                    System.out.println(1000/(tempMilli - startTime));
-                }catch (ArithmeticException ae){
-                    ae.printStackTrace();
-                }
-
                 sleepTime = ticksFPS - (tempMilli - startTime);
                 try {
                     if (sleepTime >= 0) {
@@ -209,13 +200,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 canvas.save();
                 canvas.drawColor(Color.parseColor("#FFFFFF"));
                 mDotsGrid.Draw(canvas);
-                bitmap.eraseColor(Color.TRANSPARENT);
-                c.drawColor(Color.BLUE);
-                c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, 50, eraser);
-                canvas.drawBitmap(bitmap, 0, 0, null);
-
-
-
+                mPlayer.Draw(canvas);
             }
             canvas.restore();
         }

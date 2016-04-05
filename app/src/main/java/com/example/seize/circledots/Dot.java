@@ -79,4 +79,8 @@ public class Dot implements ColorArrayPallete, ObjectCoordinates {
     public void setY(int y) {
         this.y = y;
     }
+
+    public int getRadius(){
+        return this.radius;
+    }
 }

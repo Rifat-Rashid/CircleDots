@@ -47,6 +47,7 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     private void setUpPlayerBitmap(){
         this.player_bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888);
         this.eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.eraser.setAntiAlias(true);
         this.eraser.setColor(0xFFFFFFFF);
         this.eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         this.tempCanvas = new Canvas(player_bitmap);
