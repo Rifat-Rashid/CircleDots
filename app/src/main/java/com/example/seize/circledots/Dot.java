@@ -35,7 +35,6 @@ public class Dot implements ColorArrayPallete, ObjectCoordinates {
     public void setUpPaintStack(){
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mPaint.setAntiAlias(true);
-        System.out.println(generateColor());
         this.mPaint.setColor(generateColor());
         this.mPaint.setStyle(Paint.Style.FILL);
     }
@@ -46,7 +45,7 @@ public class Dot implements ColorArrayPallete, ObjectCoordinates {
 
     @Override
     public int getColor() {
-        return this.selectedColor;
+        return this.mPaint.getColor();
     }
 
     @Override
@@ -57,10 +56,7 @@ public class Dot implements ColorArrayPallete, ObjectCoordinates {
     @Override
     public int generateColor() {
         TypedArray mTypedArray = this.context.getResources().obtainTypedArray(R.array.colors_Array);
-        int[] colors = new int[mTypedArray.length()];
         Random r = new Random();
-       // int tempColor = colors[(r.nextInt()*mTypedArray.length())];
-        //mTypedArray.recycle();
         return mTypedArray.getColor((r.nextInt(mTypedArray.length())), 0);
     }
 

@@ -28,7 +28,7 @@ public class DotsGrid {
         for(int i = 0; i < dots_grid.length; i++){
             for(int j = 0; j <dots_grid[0].length; j++){
                 mDot = new Dot(j*(3*screenWidth/5)/5 + screenWidth/5, i*(3*screenWidth/5)/5 + screenHeight/3, (screenWidth/10)/4, this.mContext);
-                 dots_grid[i][j] = mDot;
+                dots_grid[i][j] = mDot;
             }
         }
     }

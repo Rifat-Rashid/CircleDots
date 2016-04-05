@@ -32,10 +32,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public DotsGrid mDotsGrid;
     public Paint eraser;
 
-    private static final int FRAMES_PER_SECOND = 61;
     static int FPS_GAME = 61;
-    Button b;
-    static int fps_game = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,8 +173,12 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     }
                 }
                 long tempMilli = System.currentTimeMillis();
-                fps_game = (int)(1000/tempMilli);
-                //System.out.println(fps_game);
+                try {
+                    System.out.println(1000/(tempMilli - startTime));
+                }catch (ArithmeticException ae){
+                    ae.printStackTrace();
+                }
+
                 sleepTime = ticksFPS - (tempMilli - startTime);
                 try {
                     if (sleepTime >= 0) {
@@ -210,7 +211,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mDotsGrid.Draw(canvas);
                 bitmap.eraseColor(Color.TRANSPARENT);
                 c.drawColor(Color.BLUE);
-                c.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, 50, eraser);
+                c.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, 50, eraser);
                 canvas.drawBitmap(bitmap, 0, 0, null);
 
 
