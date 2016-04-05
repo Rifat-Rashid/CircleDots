@@ -22,7 +22,9 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     private Canvas tempCanvas;
     private Bitmap player_bitmap;
     private int player_color;
+    private int travelDistance = 0;
     private int circle_radius;
+    private boolean isMoving = false;
 
 
     public Player(){
@@ -56,7 +58,7 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     public void Draw(Canvas canvas){
         player_bitmap.eraseColor(Color.TRANSPARENT);
         tempCanvas.drawColor(this.player_color);
-        tempCanvas.drawCircle(getWidth()/2, getHeight()/2, this.circle_radius, this.eraser);
+        tempCanvas.drawCircle(getWidth() / 2, getHeight() / 2, this.circle_radius, this.eraser);
         canvas.drawBitmap(this.player_bitmap, getX(), getY(), null);
     }
 
@@ -103,5 +105,21 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     @Override
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getTravelDistance(){
+        return this.travelDistance;
+    }
+
+    public void setTravelDistance(int travelDistance){
+        this.travelDistance = travelDistance;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setIsMoving(boolean isMoving) {
+        this.isMoving = isMoving;
     }
 }

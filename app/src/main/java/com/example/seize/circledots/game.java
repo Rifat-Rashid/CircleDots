@@ -5,17 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.Region;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
@@ -30,6 +26,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public DotsGrid mDotsGrid;
     public Player mPlayer;
     public UserDisplay mUserDisplay;
+    public float oldX, newX;
+    public float oldY, newY;
+    static final int MIN_DISTANCEY = 170;
+    static final int MIN_DISTANCEX = 170;
 
     static int FPS_GAME = 61;
 
@@ -44,6 +44,35 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         _surfaceHolder = _surfaceView.getHolder();
         _surfaceHolder.addCallback(this);
+    }
+
+    //swipe gesture listener
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                oldX = event.getX();
+                oldY = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                newX = event.getX();
+                newY = event.getY();
+                float deltaY = newY - oldY;
+                float deltaX = newX - oldX;
+                if ((deltaX > 0) && (deltaX > MIN_DISTANCEX)) {
+                    Toast.makeText(this, "swiped right", Toast.LENGTH_SHORT).show();
+                } else if ((deltaX < 0) && (deltaX < -MIN_DISTANCEX)) {
+                    Toast.makeText(this, "swiped left", Toast.LENGTH_SHORT).show();
+                } else if ((deltaY < 0) && (deltaY < -MIN_DISTANCEY)) {
+                    Toast.makeText(this, "swiped up", Toast.LENGTH_SHORT).show();
+                } else if ((deltaY > 0) && (deltaY > MIN_DISTANCEY)) {
+                    Toast.makeText(this, "swiped down", Toast.LENGTH_SHORT).show();
+                } else {
+
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -129,10 +158,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         public void doStart() {
             synchronized (_surfaceHolder) {
                 //load here
-                int dotSize = (canvasWidth/10)/4;
-                int distanceBetweenCircles = (3*canvasWidth/5)/5;
+                int dotSize = (canvasWidth / 10) / 4;
+                int distanceBetweenCircles = (3 * canvasWidth / 5) / 5;
                 mDotsGrid = new DotsGrid(canvasWidth, canvasHeight, dotSize, getApplicationContext());
-                mPlayer = new Player(mDotsGrid.getDotObject(3, 3).getX() - distanceBetweenCircles/2, mDotsGrid.getDotObject(3, 3).getY() - distanceBetweenCircles/2, distanceBetweenCircles, distanceBetweenCircles, dotSize, getApplicationContext());
+                mPlayer = new Player(mDotsGrid.getDotObject(3, 3).getX() - distanceBetweenCircles / 2, mDotsGrid.getDotObject(3, 3).getY() - distanceBetweenCircles / 2, distanceBetweenCircles, distanceBetweenCircles, dotSize, getApplicationContext());
                 System.out.println(mDotsGrid.getDotObject(3, 5).getX());
             }
         }
