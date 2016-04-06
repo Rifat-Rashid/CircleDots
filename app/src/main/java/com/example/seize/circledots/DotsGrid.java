@@ -16,6 +16,14 @@ public class DotsGrid {
 
     }
 
+    public int widthDots(){
+        return 6;
+    }
+
+    public int heightDots(){
+        return 6;
+    }
+
     public DotsGrid(int screenWidth, int screenHeight, int dotRadius, Context context) {
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
@@ -34,8 +42,7 @@ public class DotsGrid {
     }
 
     public Dot getDotObject(int x, int y){
-        Dot tempDot = dots_grid[x][y];
-        return tempDot;
+        return dots_grid[y][x];
     }
 
     public void Draw(Canvas canvas){
@@ -44,5 +51,18 @@ public class DotsGrid {
                 dots_grid[i][j].Draw(canvas);
             }
         }
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder mStringBuilder = new StringBuilder();
+        mStringBuilder.append("Dots Grid Sequence{\n");
+        for(int i = 0; i < dots_grid.length; i++){
+            for(int j = 0; j < dots_grid[0].length; j++){
+                mStringBuilder.append("[" + dots_grid[j][i].getX() + ", " + dots_grid[j][i].getY() + "] ");
+            }
+            mStringBuilder.append("\n");
+        }
+        return mStringBuilder.toString();
     }
 }

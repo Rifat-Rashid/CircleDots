@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 
+import java.io.BufferedReader;
 import java.util.Random;
 
 /**
@@ -25,15 +26,23 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     private int travelDistance = 0;
     private int circle_radius;
     private boolean isMoving = false;
+    private boolean isMovingFinished = true;
+    private int oldX = 0;
+    private PlayerMoves currentMove = PlayerMoves.NONE;
+    private int destinationX, destinationY;
+    private int currentX = 3;
+    private int currentY = 3;
 
 
-    public Player(){
+    public Player() {
 
     }
 
-    public Player(int x, int y, int width, int height,int circle_radius, Context context){
+    public Player(int x, int y, int width, int height, int circle_radius, Context context) {
         this.x = x;
         this.y = y;
+        this.destinationX = x;
+        this.destinationY = y;
         this.width = width;
         this.height = height;
         this.circle_radius = circle_radius;
@@ -42,11 +51,11 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
         setUpPlayerBitmap();
     }
 
-    private void setUpPaintStack(){
+    private void setUpPaintStack() {
         this.player_color = generateColor();
     }
 
-    private void setUpPlayerBitmap(){
+    private void setUpPlayerBitmap() {
         this.player_bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888);
         this.eraser = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.eraser.setAntiAlias(true);
@@ -55,11 +64,57 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
         this.tempCanvas = new Canvas(player_bitmap);
     }
 
-    public void Draw(Canvas canvas){
+    public void Draw(Canvas canvas) {
         player_bitmap.eraseColor(Color.TRANSPARENT);
         tempCanvas.drawColor(this.player_color);
         tempCanvas.drawCircle(getWidth() / 2, getHeight() / 2, this.circle_radius, this.eraser);
         canvas.drawBitmap(this.player_bitmap, getX(), getY(), null);
+    }
+
+    public void setCurrentMove(PlayerMoves playerMoves){
+        this.currentMove = playerMoves;
+    }
+
+    public void movePlayer(PlayerMoves playerMoves){
+        this.currentMove = playerMoves;
+        this.setIsMoving(true);
+        this.setIsMovingFinished(false);
+    }
+
+    public int getCurrentX(){
+        return this.currentX;
+    }
+
+    public int getCurrentY(){
+        return this.currentY;
+    }
+
+    public void setCurrentX(int currentX){
+        this.currentX = currentX;
+    }
+
+    public void setCurrentY(int currentY){
+        this.currentY = currentY;
+    }
+
+    public int getDestinationX(){
+        return this.destinationX;
+    }
+
+    public int getDestinationY(){
+        return this.destinationY;
+    }
+
+    public void setDestinationX(int destinationX){
+        this.destinationX = destinationX;
+    }
+
+    public void setDestinationY(int destinationY){
+        this.destinationY = destinationY;
+    }
+
+    public PlayerMoves getCurrentMove(){
+        return this.currentMove;
     }
 
     @Override
@@ -89,11 +144,11 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
         return this.y;
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return this.width;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return this.height;
     }
 
@@ -107,11 +162,11 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
         this.y = y;
     }
 
-    public int getTravelDistance(){
+    public int getTravelDistance() {
         return this.travelDistance;
     }
 
-    public void setTravelDistance(int travelDistance){
+    public void setTravelDistance(int travelDistance) {
         this.travelDistance = travelDistance;
     }
 
@@ -121,5 +176,21 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
 
     public void setIsMoving(boolean isMoving) {
         this.isMoving = isMoving;
+    }
+
+    public boolean isMovingFinished() {
+        return isMovingFinished;
+    }
+
+    public void setIsMovingFinished(boolean isMovingFinished) {
+        this.isMovingFinished = isMovingFinished;
+    }
+
+    public int getOldX() {
+        return oldX;
+    }
+
+    public void setOldX(int oldX) {
+        this.oldX = oldX;
     }
 }

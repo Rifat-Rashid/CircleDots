@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +41,7 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
     private static final String TERMS_OF_USE_TEXT = "By continuing, you agree to our Terms of Service and Privacy Policy";
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,8 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
                 .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Games.SCOPE_GAMES)
                 .build();
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
