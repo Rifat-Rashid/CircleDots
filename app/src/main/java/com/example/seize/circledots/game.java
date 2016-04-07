@@ -1,14 +1,17 @@
 package com.example.seize.circledots;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -31,8 +34,11 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     static final int MIN_DISTANCEY = 170;
     static final int MIN_DISTANCEX = 170;
     static int distanceBetweenCircles = 0;
+    public Display display;
+    public Paint mPaint;
+    public int score = 0;
 
-    static int FPS_GAME = 61;
+    static int FPS_GAME = 62;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,22 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         _surfaceHolder = _surfaceView.getHolder();
         _surfaceHolder.addCallback(this);
+
+        _surfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        mPlayer.setCheckColors(true);
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+
+        display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     }
 
     //swipe gesture listener
@@ -189,6 +211,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mDotsGrid = new DotsGrid(canvasWidth, canvasHeight, dotSize, getApplicationContext());
                 mPlayer = new Player(mDotsGrid.getDotObject(3, 3).getX() - distanceBetweenCircles / 2, mDotsGrid.getDotObject(3, 3).getY() - distanceBetweenCircles / 2, distanceBetweenCircles, distanceBetweenCircles, dotSize, getApplicationContext());
                 mDotsGrid.toString();
+                mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                mPaint.setAntiAlias(true);
+                mPaint.setColor(Color.BLACK);
+                mPaint.setTextSize(27f);
             }
         }
 
@@ -211,8 +237,8 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             long startTime;
             long sleepTime;
             while (run) {
-                Canvas c = null;
                 startTime = System.currentTimeMillis();
+                Canvas c = null;
                 try {
                     c = _surfaceHolder.lockCanvas(null);
                     synchronized (_surfaceHolder) {
@@ -224,6 +250,15 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                         _surfaceHolder.unlockCanvasAndPost(c);
                     }
                 }
+                sleepTime = (System.currentTimeMillis() - startTime);
+                if(sleepTime <= ticksFPS){
+                    try{
+                        sleep(ticksFPS - sleepTime);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }
+                /*
                 long tempMilli = System.currentTimeMillis();
                 sleepTime = ticksFPS - (tempMilli - startTime);
                 try {
@@ -231,10 +266,12 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                         sleep(sleepTime);
                     } else {
                         //sleep(10);
+                        System.out.println("Behind schedule");
                     }
                 } catch (Exception e) {
 
                 }
+                */
             }
         }
 
@@ -254,6 +291,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             if (run) {
                 canvas.save();
                 canvas.drawColor(Color.parseColor("#FFFFFF"));
+                canvas.drawText(String.valueOf(score), 400, 100,mPaint);
                 mDotsGrid.Draw(canvas);
                 mPlayer.Draw(canvas);
             }
@@ -273,7 +311,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     case UP:
                         if (mPlayer.getY() > mPlayer.getDestinationY()) {
                             int temptY = mPlayer.getY();
-                            mPlayer.setY(temptY - 4);
+                            mPlayer.setY(temptY - 5);
                         } else {
                             int tempY = mPlayer.getDestinationY();
                             mPlayer.setY(tempY);
@@ -285,7 +323,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     case DOWN:
                         if (mPlayer.getY() < mPlayer.getDestinationY()) {
                             int temptY = mPlayer.getY();
-                            mPlayer.setY(temptY + 4);
+                            mPlayer.setY(temptY + 5);
                         } else {
                             int tempY = mPlayer.getDestinationY();
                             mPlayer.setY(tempY);
@@ -297,7 +335,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     case LEFT:
                         if (mPlayer.getX() > mPlayer.getDestinationX()) {
                             int temptX = mPlayer.getX();
-                            mPlayer.setX(temptX - 4);
+                            mPlayer.setX(temptX - 5);
                         } else {
                             int tempX = mPlayer.getDestinationX();
                             mPlayer.setX(tempX);
@@ -309,7 +347,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     case RIGHT:
                         if (mPlayer.getX() < mPlayer.getDestinationX()) {
                             int temptX = mPlayer.getX();
-                            mPlayer.setX(temptX + 4);
+                            mPlayer.setX(temptX + 5);
                         } else {
                             int tempX = mPlayer.getDestinationX();
                             mPlayer.setX(tempX);
@@ -322,6 +360,19 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                         break;
                     default:
                         break;
+                }
+            }
+
+            //check if colors match
+            if(mPlayer.getCheckColors()){
+                if(mPlayer.getColor() == mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getColor()){
+                    mPlayer.setColor(mPlayer.generateColor());
+                    mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).setColor(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).generateColor());
+                    score++;
+                    mPlayer.setCheckColors(false);
+                }else {
+                    score--;
+                    mPlayer.setCheckColors(false);
                 }
             }
         }

@@ -32,6 +32,7 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     private int destinationX, destinationY;
     private int currentX = 3;
     private int currentY = 3;
+    private boolean checkColors = false;
 
 
     public Player() {
@@ -81,6 +82,14 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
         this.setIsMovingFinished(false);
     }
 
+    public boolean getCheckColors(){
+        return this.checkColors;
+    }
+
+    public void setCheckColors(boolean checkColors){
+        this.checkColors = checkColors;
+    }
+
     public int getCurrentX(){
         return this.currentX;
     }
@@ -124,7 +133,7 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
 
     @Override
     public void setColor(int color) {
-
+        this.player_color = color;
     }
 
     @Override
