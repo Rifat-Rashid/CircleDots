@@ -52,20 +52,6 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         _surfaceHolder = _surfaceView.getHolder();
         _surfaceHolder.addCallback(this);
 
-        _surfaceView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        mPlayer.setCheckColors(true);
-                        break;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     }
 
@@ -115,8 +101,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     }
                     Toast.makeText(this, "swiped down", Toast.LENGTH_SHORT).show();
 
-                } else {
-
+                } else if ((deltaY < 15) && (deltaX < 15)){
+                    mPlayer.setCheckColors(true);
+                    Toast.makeText(this, "Tap", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

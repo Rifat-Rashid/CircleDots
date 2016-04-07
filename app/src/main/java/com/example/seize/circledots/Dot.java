@@ -50,7 +50,7 @@ public class Dot implements ColorArrayPallete, ObjectCoordinates {
 
     @Override
     public void setColor(int color) {
-        this.selectedColor = color;
+        this.mPaint.setColor(color);
     }
 
     @Override
