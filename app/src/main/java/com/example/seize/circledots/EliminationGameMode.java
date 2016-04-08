@@ -2,7 +2,10 @@ package com.example.seize.circledots;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -15,6 +18,11 @@ public class EliminationGameMode implements ColorArrayPallete {
     private Context context;
     private HashMap<Integer, int[]> hashMap;
     final int NUMBER_OF_GENERATED_LEVELS = 4;
+    private boolean isLost = false;
+    private int currentLevel;
+    private Dot[] mDots;
+    final String text = "Color Bonuses: ";
+    Paint textPaint;
 
     //default constructor
     public EliminationGameMode() {
@@ -24,10 +32,37 @@ public class EliminationGameMode implements ColorArrayPallete {
     public EliminationGameMode(Context context) {
         this.context = context;
         this.hashMap = new HashMap<>();
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setAntiAlias(true);
+        textPaint.setColor(Color.BLACK);
+        final Typeface FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(this.context.getAssets(), "fonts/ProximaNova-Regular.otf");
+        textPaint.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+        textPaint.setTextSize(35);
     }
 
     public void startElimenationGameMode() {
         generateLevels(NUMBER_OF_GENERATED_LEVELS);
+        currentLevel = 1;
+        fillArray();
+    }
+
+    public void fillArray(){
+        mDots = new Dot[this.hashMap.get(this.currentLevel).length];
+        for(int i = 0; i < mDots.length; i++){
+            //mystery numbers fix later
+            mDots[i] = new Dot(1080/5 + 75*i + (text.length() * 35)/2 + 10, 500, (1080/10)/4, this.getContext());
+        }
+    }
+
+    public int[] getColors(){
+        return hashMap.get(currentLevel);
+    }
+
+    public void Draw(Canvas canvas){
+        for(int i = 0; i < mDots.length; i++){
+            mDots[i].Draw(canvas);
+        }
+        canvas.drawText(text, 1080/5, 510, textPaint);
     }
 
     protected void generateLevels(int numberOfLevels) {
@@ -64,6 +99,14 @@ public class EliminationGameMode implements ColorArrayPallete {
         this.hashMap = hashMap;
     }
 
+    public void setCurrentLevel(int currentLevel){
+        this.currentLevel = currentLevel;
+    }
+
+    public int getCurrentLevel(){
+        return this.currentLevel;
+    }
+
     public int[] generateColorArray() {
         Random r = new Random();
         int[] tempArray = new int[r.nextInt(5 - 3 + 1) + 3];
@@ -93,5 +136,13 @@ public class EliminationGameMode implements ColorArrayPallete {
         TypedArray mTypedArray = this.context.getResources().obtainTypedArray(R.array.colors_Array);
         Random r = new Random();
         return mTypedArray.getColor((r.nextInt(mTypedArray.length())), 0);
+    }
+
+    public void setIsLost(boolean b){
+        this.isLost = b;
+    }
+
+    public boolean getIsLost(){
+        return this.isLost;
     }
 }

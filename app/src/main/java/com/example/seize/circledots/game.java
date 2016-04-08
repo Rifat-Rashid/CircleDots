@@ -207,8 +207,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mPaint.setColor(Color.parseColor("#95a5a6"));
                 mPaint.setTextSize(SCORE_FONT_SIZE);
                 mCircleTimer = new CircleTimer(canvasWidth / 2, (mDotsGrid.getDotObject(0, 0).getY() - dotSize / 2) / 2 , dotSize * 4, 270f, 360f);
+                mCircleTimer.start(25);
                 mEliminationGameMode = new EliminationGameMode(getApplicationContext());
                 mEliminationGameMode.startElimenationGameMode();
+
             }
         }
 
@@ -276,6 +278,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mDotsGrid.Draw(canvas);
                 mPlayer.Draw(canvas);
                 mCircleTimer.Draw(canvas);
+                mEliminationGameMode.Draw(canvas);
             }
             canvas.restore();
         }
@@ -348,6 +351,12 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             //check if colors match
             if (mPlayer.getCheckColors()) {
                 if (mPlayer.getColor() == mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getColor()) {
+                    int[] tempArray = mEliminationGameMode.getColors();
+                    for(int i = 0; i < tempArray.length; i++){
+                        if(tempArray[i] == mPlayer.getColor()){
+                            score *=2;
+                        }
+                    }
                     mPlayer.setColor(mPlayer.generateColor());
                     mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).setColor(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).generateColor());
                     score++;
@@ -357,10 +366,6 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     mPlayer.setCheckColors(false);
                 }
             }
-
-            //angle measures
-
-
         }
     }
 }
