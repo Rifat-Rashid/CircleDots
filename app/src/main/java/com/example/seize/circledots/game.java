@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -37,6 +38,13 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public Display display;
     public Paint mPaint;
     public int score = 0;
+    public static final float SCORE_FONT_SIZE = 75f;
+    public Typeface FONT_PROXIMA_NOVA_LIGHT;
+    public float sweepAngle = 360;
+    public float startAngle = 270;
+
+    public Paint uPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
 
     static int FPS_GAME = 62;
 
@@ -47,6 +55,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         getWindow().setFlags(0xFFFFFFFF, WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.game);
         //mUserDisplay = new UserDisplay(this);
+        FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(getAssets(), "fonts/ProximaNova-Regular.otf");
 
         _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         _surfaceHolder = _surfaceView.getHolder();
@@ -200,8 +209,13 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mDotsGrid.toString();
                 mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
                 mPaint.setAntiAlias(true);
-                mPaint.setColor(Color.BLACK);
-                mPaint.setTextSize(27f);
+                mPaint.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+                mPaint.setColor(Color.parseColor("#95a5a6"));
+                mPaint.setTextSize(SCORE_FONT_SIZE);
+                uPaint.setColor(Color.BLACK);
+                uPaint.setStyle(Paint.Style.STROKE);
+                uPaint.setStrokeWidth(10f);
+
             }
         }
 
@@ -245,20 +259,6 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                         e.printStackTrace();
                     }
                 }
-                /*
-                long tempMilli = System.currentTimeMillis();
-                sleepTime = ticksFPS - (tempMilli - startTime);
-                try {
-                    if (sleepTime >= 0) {
-                        sleep(sleepTime);
-                    } else {
-                        //sleep(10);
-                        System.out.println("Behind schedule");
-                    }
-                } catch (Exception e) {
-
-                }
-                */
             }
         }
 
@@ -278,9 +278,11 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             if (run) {
                 canvas.save();
                 canvas.drawColor(Color.parseColor("#FFFFFF"));
-                canvas.drawText(String.valueOf(score), 400, 100,mPaint);
+                String tempScoreString = "Score: " + String.valueOf(score);
+                canvas.drawText("Score: " + String.valueOf(score), canvasWidth/2 - tempScoreString.length()/4*SCORE_FONT_SIZE, 3*canvasHeight/4 + SCORE_FONT_SIZE,mPaint);
                 mDotsGrid.Draw(canvas);
                 mPlayer.Draw(canvas);
+                canvas.drawArc(canvasWidth/2 - 50, 100, canvasWidth/2 + 50, 200,startAngle, sweepAngle,false,  uPaint);
             }
             canvas.restore();
         }
@@ -362,6 +364,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     mPlayer.setCheckColors(false);
                 }
             }
+
+            //angle measures
+            sweepAngle -= 1.2f;
+            startAngle += 1.2f;
         }
     }
 }
