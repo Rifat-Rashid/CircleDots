@@ -208,7 +208,6 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mPaint.setTextSize(SCORE_FONT_SIZE);
                 mCircleTimer = new CircleTimer(canvasWidth / 2, (mDotsGrid.getDotObject(0, 0).getY() - dotSize / 2) / 4, dotSize * 2, 270f, 360f);
                 mCircleTimer.start(5);
-                //startTimer();
             }
         }
 
@@ -362,23 +361,5 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
 
 
         }
-    }
-
-    public void startTimer() {
-
-        game.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                new CountDownTimer(5000, 1000) {
-                    public void onTick(long millisUntilFinished) {
-                        countdDown = millisUntilFinished;
-                    }
-
-                    public void onFinish() {
-
-                    }
-                }.start();
-            }
-        });
     }
 }
