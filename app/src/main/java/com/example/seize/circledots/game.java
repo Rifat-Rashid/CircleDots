@@ -41,7 +41,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public Typeface FONT_PROXIMA_NOVA_LIGHT;
     public CircleTimer mCircleTimer;
     static int FPS_GAME = 62;
-    static long countdDown;
+    public EliminationGameMode mEliminationGameMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,7 +207,8 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mPaint.setColor(Color.parseColor("#95a5a6"));
                 mPaint.setTextSize(SCORE_FONT_SIZE);
                 mCircleTimer = new CircleTimer(canvasWidth / 2, (mDotsGrid.getDotObject(0, 0).getY() - dotSize / 2) / 2 , dotSize * 4, 270f, 360f);
-                mCircleTimer.start(5);
+                mEliminationGameMode = new EliminationGameMode(getApplicationContext());
+                mEliminationGameMode.startElimenationGameMode();
             }
         }
 

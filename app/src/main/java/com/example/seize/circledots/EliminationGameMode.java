@@ -17,34 +17,54 @@ public class EliminationGameMode implements ColorArrayPallete {
     final int NUMBER_OF_GENERATED_LEVELS = 4;
 
     //default constructor
-    public EliminationGameMode(){
+    public EliminationGameMode() {
 
     }
 
-    public EliminationGameMode(Context context){
+    public EliminationGameMode(Context context) {
         this.context = context;
         this.hashMap = new HashMap<>();
     }
 
-    public void startElimenationGameMode(){
+    public void startElimenationGameMode() {
         generateLevels(NUMBER_OF_GENERATED_LEVELS);
     }
 
-    protected void generateLevels(int numberOfLevels){
-        for(int i = 1; i <= numberOfLevels; i++){
-            try{
-                if(!(this.hashMap.containsKey(i))){
+    protected void generateLevels(int numberOfLevels) {
+        for (int i = 1; i <= numberOfLevels; i++) {
+            try {
+                if (!(this.hashMap.containsKey(i))) {
                     this.hashMap.put(i, generateColorArray());
-                }else {
+                } else {
                     continue;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public int[] generateColorArray(){
+    public int getNUMBER_OF_GENERATED_LEVELS() {
+        return NUMBER_OF_GENERATED_LEVELS;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public HashMap<Integer, int[]> getHashMap() {
+        return hashMap;
+    }
+
+    public void setHashMap(HashMap<Integer, int[]> hashMap) {
+        this.hashMap = hashMap;
+    }
+
+    public int[] generateColorArray() {
         Random r = new Random();
         int[] tempArray = new int[r.nextInt(5 - 3 + 1) + 3];
         //fill array with color values
@@ -52,7 +72,7 @@ public class EliminationGameMode implements ColorArrayPallete {
             for (int i = 0; i < tempArray.length; i++) {
                 tempArray[i] = generateColor();
             }
-        }catch (IndexOutOfBoundsException obe){
+        } catch (IndexOutOfBoundsException obe) {
             obe.printStackTrace();
         }
         return tempArray;
