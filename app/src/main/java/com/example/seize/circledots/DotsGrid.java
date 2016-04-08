@@ -53,6 +53,14 @@ public class DotsGrid {
         }
     }
 
+    public void changeGridColors(){
+        for(int i = 0; i < dots_grid.length; i++){
+            for(int j = 0; j < dots_grid[0].length; j++){
+                dots_grid[i][j].setColor(dots_grid[i][j].generateColor());
+            }
+        }
+    }
+
     @Override
     public String toString(){
         StringBuilder mStringBuilder = new StringBuilder();
