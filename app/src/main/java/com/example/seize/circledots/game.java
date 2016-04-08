@@ -110,7 +110,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     }
                     Toast.makeText(this, "swiped down", Toast.LENGTH_SHORT).show();
 
-                } else if ((deltaY < 15) && (deltaX < 15)){
+                } else if ((deltaY < 15) && (deltaX < 15)) {
                     mPlayer.setCheckColors(true);
                     Toast.makeText(this, "Tap", Toast.LENGTH_SHORT).show();
                 }
@@ -252,10 +252,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     }
                 }
                 sleepTime = (System.currentTimeMillis() - startTime);
-                if(sleepTime <= ticksFPS){
-                    try{
+                if (sleepTime <= ticksFPS) {
+                    try {
                         sleep(ticksFPS - sleepTime);
-                    }catch (InterruptedException e){
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -279,10 +279,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 canvas.save();
                 canvas.drawColor(Color.parseColor("#FFFFFF"));
                 String tempScoreString = "Score: " + String.valueOf(score);
-                canvas.drawText("Score: " + String.valueOf(score), canvasWidth/2 - tempScoreString.length()/4*SCORE_FONT_SIZE, 3*canvasHeight/4 + SCORE_FONT_SIZE,mPaint);
+                canvas.drawText("Score: " + String.valueOf(score), canvasWidth / 2 - tempScoreString.length() / 4 * SCORE_FONT_SIZE, 3 * canvasHeight / 4 + SCORE_FONT_SIZE, mPaint);
                 mDotsGrid.Draw(canvas);
                 mPlayer.Draw(canvas);
-                canvas.drawArc(canvasWidth/2 - 50, 100, canvasWidth/2 + 50, 200,startAngle, sweepAngle,false,  uPaint);
+                canvas.drawArc(canvasWidth / 2 - 50, 100, canvasWidth / 2 + 50, 200, startAngle, sweepAngle, false, uPaint);
             }
             canvas.restore();
         }
@@ -353,13 +353,13 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             }
 
             //check if colors match
-            if(mPlayer.getCheckColors()){
-                if(mPlayer.getColor() == mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getColor()){
+            if (mPlayer.getCheckColors()) {
+                if (mPlayer.getColor() == mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getColor()) {
                     mPlayer.setColor(mPlayer.generateColor());
                     mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).setColor(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).generateColor());
                     score++;
                     mPlayer.setCheckColors(false);
-                }else {
+                } else {
                     score--;
                     mPlayer.setCheckColors(false);
                 }
