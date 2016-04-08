@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -25,11 +26,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     private Handler handlerApplication;
     private SurfaceHolder _surfaceHolder;
     private SurfaceView _surfaceView;
-    static Paint counter = new Paint(Paint.ANTI_ALIAS_FLAG);
     private GameLoopThread thread;
     public DotsGrid mDotsGrid;
     public Player mPlayer;
-    public UserDisplay mUserDisplay;
     public float oldX, newX;
     public float oldY, newY;
     static final int MIN_DISTANCEY = 170;
@@ -40,13 +39,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public int score = 0;
     public static final float SCORE_FONT_SIZE = 75f;
     public Typeface FONT_PROXIMA_NOVA_LIGHT;
-    public float sweepAngle = 360;
-    public float startAngle = 270;
-
-    public Paint uPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-
+    public CircleTimer mCircleTimer;
     static int FPS_GAME = 62;
+    static long countdDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +49,6 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(0xFFFFFFFF, WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.game);
-        //mUserDisplay = new UserDisplay(this);
         FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(getAssets(), "fonts/ProximaNova-Regular.otf");
 
         _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
@@ -212,10 +206,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mPaint.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
                 mPaint.setColor(Color.parseColor("#95a5a6"));
                 mPaint.setTextSize(SCORE_FONT_SIZE);
-                uPaint.setColor(Color.BLACK);
-                uPaint.setStyle(Paint.Style.STROKE);
-                uPaint.setStrokeWidth(10f);
-
+                mCircleTimer = new CircleTimer(canvasWidth / 2, (mDotsGrid.getDotObject(0, 0).getY() - dotSize / 2) / 4, dotSize * 2, 270f, 360f);
+                mCircleTimer.start(5);
+                //startTimer();
             }
         }
 
@@ -282,7 +275,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 canvas.drawText("Score: " + String.valueOf(score), canvasWidth / 2 - tempScoreString.length() / 4 * SCORE_FONT_SIZE, 3 * canvasHeight / 4 + SCORE_FONT_SIZE, mPaint);
                 mDotsGrid.Draw(canvas);
                 mPlayer.Draw(canvas);
-                canvas.drawArc(canvasWidth / 2 - 50, 100, canvasWidth / 2 + 50, 200, startAngle, sweepAngle, false, uPaint);
+                mCircleTimer.Draw(canvas);
             }
             canvas.restore();
         }
@@ -366,8 +359,26 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             }
 
             //angle measures
-            sweepAngle -= 1.2f;
-            startAngle += 1.2f;
+
+
         }
+    }
+
+    public void startTimer() {
+
+        game.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new CountDownTimer(5000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        countdDown = millisUntilFinished;
+                    }
+
+                    public void onFinish() {
+
+                    }
+                }.start();
+            }
+        });
     }
 }
