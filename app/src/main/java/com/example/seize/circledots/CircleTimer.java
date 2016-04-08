@@ -21,12 +21,12 @@ public class CircleTimer implements ObjectCoordinates {
         return this.x;
     }
 
-    @Override
+     @Override
     public int getY() {
         return this.y;
     }
 
-    @Override
+     @Override
     public void setX(int x) {
         this.x = x;
     }
