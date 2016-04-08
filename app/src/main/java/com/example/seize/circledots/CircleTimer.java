@@ -1,12 +1,15 @@
 package com.example.seize.circledots;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+
 /**
  * Created by Seize on 4/7/2016.
  */
 public class CircleTimer implements ObjectCoordinates {
     private int x, y, radius;
     private float sweepAngle, startAngle;
-
+    private Paint mPaint;
 
 
     //default constructor
@@ -14,7 +17,23 @@ public class CircleTimer implements ObjectCoordinates {
 
     }
 
+    public CircleTimer(int x, int y, int radius, float startAngle, float sweepAngle){
 
+    }
+
+    public CircleTimer(int x, int y, int radius, float startAngle, float sweepAngle, Paint mPaint){
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.startAngle = startAngle;
+        this.sweepAngle = sweepAngle;
+        this.mPaint = mPaint;
+    }
+
+    public void Draw(Canvas canvas){
+        //api 21. Worry about this later!
+        canvas.drawArc(this.x - this.radius, this.y - this.radius, this.x + radius, this.y + radius, this.startAngle, this.sweepAngle, false, this.mPaint);
+    }
 
     @Override
     public int getX() {
@@ -69,6 +88,8 @@ public class CircleTimer implements ObjectCoordinates {
         };
         new Thread(r).start();
     }
+
+
 
 
 }
