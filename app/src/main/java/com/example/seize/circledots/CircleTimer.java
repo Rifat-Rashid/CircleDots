@@ -49,7 +49,7 @@ public class CircleTimer implements ObjectCoordinates {
     public void setupPaintStack() {
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mPaint.setAntiAlias(true);
-        this.mPaint.setColor(Color.parseColor("#c0392b"));
+        this.mPaint.setColor(Color.parseColor("#e74c3c"));
         this.mPaint.setStyle(Paint.Style.STROKE);
         this.mPaint.setStrokeWidth(this.radius / 10);
     }
@@ -110,9 +110,9 @@ public class CircleTimer implements ObjectCoordinates {
         ValueAnimator mTimerAnimator = ValueAnimator.ofFloat(0f, 1f);
         mTimerAnimator.setDuration(TimeUnit.SECONDS.toMillis(secs));
         mTimerAnimator.setInterpolator(new LinearInterpolator());
-        mTimerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
+        mTimerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation){
+            public void onAnimationUpdate(ValueAnimator animation) {
                 drawProgress((float) animation.getAnimatedValue());
             }
         });

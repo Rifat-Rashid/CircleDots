@@ -206,7 +206,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mPaint.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
                 mPaint.setColor(Color.parseColor("#95a5a6"));
                 mPaint.setTextSize(SCORE_FONT_SIZE);
-                mCircleTimer = new CircleTimer(canvasWidth / 2, (mDotsGrid.getDotObject(0, 0).getY() - dotSize / 2) / 4, dotSize * 2, 270f, 360f);
+                mCircleTimer = new CircleTimer(canvasWidth / 2, (mDotsGrid.getDotObject(0, 0).getY() - dotSize / 2) / 2 , dotSize * 4, 270f, 360f);
                 mCircleTimer.start(5);
             }
         }
