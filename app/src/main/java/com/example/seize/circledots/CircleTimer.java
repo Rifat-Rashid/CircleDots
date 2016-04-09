@@ -60,8 +60,8 @@ public class CircleTimer implements ObjectCoordinates {
 
     public void Draw(Canvas canvas) {
         //api 21. Worry about this later!
-        indicator = secondsGoneBy + "%";
-        canvas.drawText(indicator, rectF.left + this.radius - (textPaint.measureText(indicator, 0, indicator.length()))/2, rectF.top + this.radius, textPaint);
+        indicator = String.valueOf(secondsGoneBy);
+        canvas.drawText(indicator, rectF.left + this.radius - (textPaint.measureText(indicator, 0, indicator.length())) / 2, rectF.top + this.radius + (textPaint.descent() - textPaint.ascent()) / 2, textPaint);
         canvas.drawArc(this.x - this.radius, this.y - this.radius, this.x + radius, this.y + radius, 270, 360, false, this.sPaint);
         canvas.drawArc(this.x - this.radius, this.y - this.radius, this.x + radius, this.y + radius, this.startAngle, this.sweepAngle, false, this.mPaint);
     }
@@ -78,7 +78,7 @@ public class CircleTimer implements ObjectCoordinates {
         this.textPaint.setAntiAlias(true);
         this.textPaint.setColor(res.getColor(android.R.color.holo_orange_dark));
         this.textPaint.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
-        this.textPaint.setTextSize(this.radius/2);
+        this.textPaint.setTextSize(this.radius * .8f);
 
         this.sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.sPaint.setAntiAlias(true);
