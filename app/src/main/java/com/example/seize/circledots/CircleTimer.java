@@ -61,7 +61,7 @@ public class CircleTimer implements ObjectCoordinates {
     public void Draw(Canvas canvas) {
         //api 21. Worry about this later!
         indicator = String.valueOf(secondsGoneBy);
-        canvas.drawText(indicator, rectF.left + this.radius - (textPaint.measureText(indicator, 0, indicator.length())) / 2, rectF.top + this.radius + (textPaint.descent() - textPaint.ascent()) / 2, textPaint);
+        canvas.drawText(indicator, rectF.left + this.radius - (textPaint.measureText(indicator, 0, indicator.length())) / 2, rectF.top + this.radius + (textPaint.descent() - textPaint.ascent()) / 4, textPaint);
         canvas.drawArc(this.x - this.radius, this.y - this.radius, this.x + radius, this.y + radius, 270, 360, false, this.sPaint);
         canvas.drawArc(this.x - this.radius, this.y - this.radius, this.x + radius, this.y + radius, this.startAngle, this.sweepAngle, false, this.mPaint);
     }
