@@ -31,6 +31,7 @@ public class CircleTimer implements ObjectCoordinates {
     private int secondsGoneBy = 0;
     private Paint textPaint;
     private boolean isTimerRunning;
+    private int[] colorArray;
 
     //default constructor
     public CircleTimer() {
@@ -86,6 +87,18 @@ public class CircleTimer implements ObjectCoordinates {
         this.sPaint.setColor(res.getColor(android.R.color.holo_orange_light));
         this.sPaint.setStyle(Paint.Style.STROKE);
         this.sPaint.setStrokeWidth(this.radius / 8);
+
+        colorArray = new int[]{res.getColor(android.R.color.holo_orange_dark), res.getColor(android.R.color.holo_orange_light), Color.parseColor("#e74c3c"), Color.parseColor("#1F9EA3")};
+    }
+
+    public void changeColor(int index){
+        try {
+            this.mPaint.setColor(colorArray[index]);
+            this.sPaint.setColor(colorArray[index + 1]);
+            this.textPaint.setColor(colorArray[index]);
+        }catch (IndexOutOfBoundsException oob){
+            oob.printStackTrace();
+        }
     }
 
     public long getSecondsTimer() {
@@ -140,17 +153,18 @@ public class CircleTimer implements ObjectCoordinates {
         this.startAngle = startAngle;
     }
 
-    public boolean getIsRunning(){
+    public boolean getIsRunning() {
         return this.isTimerRunning;
     }
 
-    public void setIsRunning(boolean isTimerRunning){
+    public void setIsRunning(boolean isTimerRunning) {
         this.isTimerRunning = isTimerRunning;
     }
 
     public void start(int secs) {
-        this.isTimerRunning = true;
+        this.sweepAngle = 360;
         this.seconds = secs;
+        this.isTimerRunning = true;
         ValueAnimator mTimerAnimator = ValueAnimator.ofFloat(0f, 1f);
         mTimerAnimator.setDuration(TimeUnit.SECONDS.toMillis(secs));
         mTimerAnimator.setInterpolator(new LinearInterpolator());
@@ -167,7 +181,7 @@ public class CircleTimer implements ObjectCoordinates {
     public void drawProgress(float progress) {
         this.sweepAngle = -(360 - (360 * progress));
         this.secondsGoneBy = (int) (seconds - (seconds * progress));
-        if(this.secondsGoneBy <= 0){
+        if (this.secondsGoneBy <= 0) {
             this.isTimerRunning = false;
         }
     }

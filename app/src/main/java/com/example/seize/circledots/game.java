@@ -335,6 +335,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mPlayer.Draw(canvas);
                 mCircleTimer.Draw(canvas);
                 mEliminationGameMode.Draw(canvas);
+                //shade the background
+                if (isLost) {
+                    canvas.drawColor(Color.parseColor("#78000000"));
+                }
             }
             canvas.restore();
         }
@@ -407,7 +411,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 }
 
                 //see if the timer is still running
-                if(mCircleTimer.getIsRunning()) {
+                if (mCircleTimer.getIsRunning()) {
                     //see if we should check colors
                     if (mPlayer.getCheckColors()) {
                         //compare color of player with color of dot on the grid @players (x,y)'s position
@@ -416,6 +420,8 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                             if (mPlayer.getColor() == mEliminationGameMode.getColorAt(player_color_position)) {
                                 //check to see if player_color_position is not going past the value of the color array length
                                 if (player_color_position == mEliminationGameMode.getColors().length - 1) {
+                                    mEliminationGameMode.nextLevel();
+                                    mDotsGrid.changeGridColors();
                                     player_color_position = 0;
                                     mPlayer.setColor(mEliminationGameMode.getColorAt(player_color_position));
                                     score += 3;
@@ -432,10 +438,14 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                         }
                         mPlayer.setCheckColors(false);
                     }
-                }else {
+
+                } else {
+                   // mCircleTimer.changeColor(mEliminationGameMode.getCurrentLevel());
+                    //mCircleTimer.setIsRunning(true);
+                    //mCircleTimer.start(25);
                     isLost = true;
                 }
-
+//
             /*
             if (mPlayer.getCheckColors()) {
                 if (mPlayer.getColor() == mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getColor()) {
@@ -463,7 +473,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 }
             }
             */
-            }else {
+            } else {
 
             }
         }
