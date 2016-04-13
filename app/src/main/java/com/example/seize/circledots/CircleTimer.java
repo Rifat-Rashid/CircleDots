@@ -30,6 +30,7 @@ public class CircleTimer implements ObjectCoordinates {
     private String indicator;
     private int secondsGoneBy = 0;
     private Paint textPaint;
+    private boolean isTimerRunning;
 
     //default constructor
     public CircleTimer() {
@@ -139,7 +140,16 @@ public class CircleTimer implements ObjectCoordinates {
         this.startAngle = startAngle;
     }
 
+    public boolean getIsRunning(){
+        return this.isTimerRunning;
+    }
+
+    public void setIsRunning(boolean isTimerRunning){
+        this.isTimerRunning = isTimerRunning;
+    }
+
     public void start(int secs) {
+        this.isTimerRunning = true;
         this.seconds = secs;
         ValueAnimator mTimerAnimator = ValueAnimator.ofFloat(0f, 1f);
         mTimerAnimator.setDuration(TimeUnit.SECONDS.toMillis(secs));
@@ -147,7 +157,7 @@ public class CircleTimer implements ObjectCoordinates {
         mTimerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                System.out.println(animation.getAnimatedValue());
+                //System.out.println(animation.getAnimatedValue());
                 drawProgress((float) animation.getAnimatedValue());
             }
         });
@@ -157,6 +167,9 @@ public class CircleTimer implements ObjectCoordinates {
     public void drawProgress(float progress) {
         this.sweepAngle = -(360 - (360 * progress));
         this.secondsGoneBy = (int) (seconds - (seconds * progress));
+        if(this.secondsGoneBy <= 0){
+            this.isTimerRunning = false;
+        }
     }
 
 }

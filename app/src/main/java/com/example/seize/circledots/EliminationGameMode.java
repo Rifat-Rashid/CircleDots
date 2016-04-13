@@ -47,10 +47,13 @@ public class EliminationGameMode implements ColorArrayPallete {
     }
 
     public void fillArray(){
+        Dot tempDot;
         mDots = new Dot[this.hashMap.get(this.currentLevel).length];
         for(int i = 0; i < mDots.length; i++){
             //mystery numbers fix later
-            mDots[i] = new Dot(1080/5 + 75*i + (text.length() * 35)/2 + 10, 500, (1080/10)/4, this.getContext());
+            tempDot = new Dot(1080/5 + 75*i + (text.length() * 35)/2 + 10, 500, (1080/10)/4, this.getContext());
+            tempDot.setColor(this.hashMap.get(this.currentLevel)[i]);
+            mDots[i] = tempDot;
         }
     }
 
@@ -58,11 +61,25 @@ public class EliminationGameMode implements ColorArrayPallete {
         return hashMap.get(currentLevel);
     }
 
+    public int getColorAt(int index){
+        //check to see if requested index is within range
+        if(!(index >= hashMap.get(currentLevel).length)){
+            return hashMap.get(currentLevel)[index];
+        }else{
+            return -1;
+        }
+    }
+
     public void Draw(Canvas canvas){
         for(int i = 0; i < mDots.length; i++){
             mDots[i].Draw(canvas);
         }
         canvas.drawText(text, 1080/5, 510, textPaint);
+    }
+
+    public void nextLevel(){
+        this.currentLevel++;
+        fillArray();
     }
 
     protected void generateLevels(int numberOfLevels) {

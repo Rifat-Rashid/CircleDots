@@ -58,8 +58,6 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
                 .addScope(Games.SCOPE_GAMES)
                 .build();
 
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
