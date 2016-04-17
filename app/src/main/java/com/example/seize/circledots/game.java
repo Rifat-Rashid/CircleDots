@@ -8,13 +8,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -36,7 +33,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public float oldY, newY;
     static final int MIN_DISTANCEY = 170;
     static final int MIN_DISTANCEX = 170;
-    static int distanceBetweenCircles = 0;
+    static float distanceBetweenCircles = 0;
     public Display display;
     public Paint mPaint;
     public int score = 0;
@@ -49,6 +46,8 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public static boolean isLost;
     public static int player_color_position;
     public Queue<PlayerMoves> playerMovesQueue;
+    public String tempScore;
+    public float player_shift_faze = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,54 +84,16 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 float deltaX = newX - oldX;
 
                 if ((deltaX > 0) && (deltaX > MIN_DISTANCEX)) {
-                    if (!(mPlayer.isMoving())) {
-                        //if the players movement does not go outside the grid range
-                        if (!(mPlayer.getCurrentX() >= mDotsGrid.widthDots() - 1)) {
-                            mPlayer.setCurrentX(mPlayer.getCurrentX() + 1);
-                            mPlayer.setDestinationX(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getX() - distanceBetweenCircles / 2);
-                            mPlayer.movePlayer(PlayerMoves.RIGHT);
-                        }
-                        Toast.makeText(this, "swiped right", Toast.LENGTH_SHORT).show();
-                    } else {
-                        playerMovesQueue.add(PlayerMoves.RIGHT);
-                    }
+                    playerMovesQueue.add(PlayerMoves.RIGHT);
 
                 } else if ((deltaX < 0) && (deltaX < -MIN_DISTANCEX)) {
-                    if (!(mPlayer.isMoving())) {
-                        if (!(mPlayer.getCurrentX() <= 0)) {
-                            mPlayer.setCurrentX(mPlayer.getCurrentX() - 1);
-                            mPlayer.setDestinationX(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getX() - distanceBetweenCircles / 2);
-                            mPlayer.movePlayer(PlayerMoves.LEFT);
-                        }
-                        Toast.makeText(this, "swiped left", Toast.LENGTH_SHORT).show();
-                    } else {
-                        playerMovesQueue.add(PlayerMoves.LEFT);
-                    }
-
+                    playerMovesQueue.add(PlayerMoves.LEFT);
 
                 } else if ((deltaY < 0) && (deltaY < -MIN_DISTANCEY)) {
-                    if (!(mPlayer.isMoving())) {
-                        if (!(mPlayer.getCurrentY() <= 0)) {
-                            mPlayer.setCurrentY(mPlayer.getCurrentY() - 1);
-                            mPlayer.setDestinationY(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getY() - distanceBetweenCircles / 2);
-                            mPlayer.movePlayer(PlayerMoves.UP);
-                        }
-                        Toast.makeText(this, "swiped up", Toast.LENGTH_SHORT).show();
-                    } else {
-                        playerMovesQueue.add(PlayerMoves.UP);
-                    }
+                    playerMovesQueue.add(PlayerMoves.UP);
 
                 } else if ((deltaY > 0) && (deltaY > MIN_DISTANCEY)) {
-                    if (!(mPlayer.isMoving())) {
-                        if (!(mPlayer.getCurrentY() >= mDotsGrid.widthDots() - 1)) {
-                            mPlayer.setCurrentY(mPlayer.getCurrentY() + 1);
-                            mPlayer.setDestinationY(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getY() - distanceBetweenCircles / 2);
-                            mPlayer.movePlayer(PlayerMoves.DOWN);
-                        }
-                        Toast.makeText(this, "swiped down", Toast.LENGTH_SHORT).show();
-                    } else {
-                        playerMovesQueue.add(PlayerMoves.DOWN);
-                    }
+                    playerMovesQueue.add(PlayerMoves.DOWN);
 
                 } else if ((deltaY < 15) && (deltaX < 15)) {
                     //check for a tap
@@ -238,10 +199,12 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mPaint.setColor(Color.parseColor("#95a5a6"));
                 mPaint.setTextSize(SCORE_FONT_SIZE);
                 mCircleTimer = new CircleTimer(2 * dotSize + dotSize * 4, 2 * dotSize + dotSize * 4, dotSize * 4, 270f, 360f, getApplicationContext());
-                mCircleTimer.start(25);
+                mCircleTimer.start(100);
                 mEliminationGameMode = new EliminationGameMode(getApplicationContext());
                 mEliminationGameMode.startElimenationGameMode();
                 mPlayer.setColor(mEliminationGameMode.getColorAt(0));
+                player_shift_faze = 6;
+
             }
         }
 
@@ -264,17 +227,15 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             long startTime;
             long sleepTime;
 
-            long sT = System.currentTimeMillis();
-            long endTime;
             while (run) {
-                startTime = System.currentTimeMillis();
-                if (System.currentTimeMillis() - sT >= 1000) {
-                    System.out.println(fpg);
-                    fpg = 0;
-                    sT = System.currentTimeMillis();
-                } else {
-
-                }
+                //   startTime = System.currentTimeMillis();
+                //   if (System.currentTimeMillis() - sT >= 1000) {
+                //       System.out.println(fpg);
+                //       fpg = 0;
+                //        sT = System.currentTimeMillis();
+                //    } else {
+//
+                //     }
                 Canvas c = null;
                 try {
                     c = _surfaceHolder.lockCanvas(null);
@@ -289,27 +250,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                         _surfaceHolder.unlockCanvasAndPost(c);
                     }
                 }
+                if (mPlayer.isMoving()) {
+                    mPlayer.setNumFrames(mPlayer.getNumFrames() + 1);
+                }
 
-                sleepTime = (System.currentTimeMillis() - startTime);
-                if (sleepTime <= ticksFPS) {
-                    try {
-                        Thread.sleep(ticksFPS - sleepTime);
-                        //sleep(ticksFPS - sleepTime);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                /*
-                sleepTime = (System.currentTimeMillis() - startTime);
-                if (sleepTime <= ticksFPS) {
-                    try {
-                        sleep(ticksFPS - sleepTime);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                */
-                fpg++;
             }
         }
 
@@ -329,8 +273,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             if (run) {
                 canvas.save();
                 canvas.drawColor(Color.parseColor("#FFFFFF"));
-                String tempScoreString = "Score: " + String.valueOf(score);
-                canvas.drawText("Score: " + String.valueOf(score), canvasWidth / 2 - tempScoreString.length() / 4 * SCORE_FONT_SIZE, 3 * canvasHeight / 4 + SCORE_FONT_SIZE, mPaint);
+                tempScore = "Score: " + String.valueOf(score);
+                canvas.drawText(tempScore, canvasWidth / 2 - tempScore.length() / 4 * SCORE_FONT_SIZE, 3 * canvasHeight / 4 + SCORE_FONT_SIZE, mPaint);
+                tempScore = null;
                 mDotsGrid.Draw(canvas);
                 mPlayer.Draw(canvas);
                 mCircleTimer.Draw(canvas);
@@ -345,6 +290,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     }
 
     class GamePhysicsThread {
+
         public GamePhysicsThread() {
             //new fpsThread();
         }
@@ -352,55 +298,108 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         public void update() {
             //is the player moving
             if (!isLost) {
-                //check if theres values in the queue
+                if (!playerMovesQueue.isEmpty()) {
+                    if (!mPlayer.isMoving() && mPlayer.isMovingFinished()) {
+                        switch (playerMovesQueue.peek()) {
+                            case UP:
+                                if (!(mPlayer.getCurrentY() <= 0)) {
+                                    mPlayer.setCurrentY(mPlayer.getCurrentY() - 1);
+                                    mPlayer.setDestinationY(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getY() - distanceBetweenCircles / 2);
+                                    mPlayer.movePlayer(PlayerMoves.UP);
+                                } else {
+                                    playerMovesQueue.remove();
+                                    mPlayer.setCurrentMove(PlayerMoves.NONE);
+                                }
+                                break;
+                            case DOWN:
+                                if (!(mPlayer.getCurrentY() >= mDotsGrid.widthDots() - 1)) {
+                                    mPlayer.setCurrentY(mPlayer.getCurrentY() + 1);
+                                    mPlayer.setDestinationY(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getY() - distanceBetweenCircles / 2);
+                                    mPlayer.movePlayer(PlayerMoves.DOWN);
+                                } else {
+                                    playerMovesQueue.remove();
+                                    mPlayer.setCurrentMove(PlayerMoves.NONE);
+                                }
+                                break;
+                            case LEFT:
+                                if (!(mPlayer.getCurrentX() <= 0)) {
+                                    mPlayer.setCurrentX(mPlayer.getCurrentX() - 1);
+                                    mPlayer.setDestinationX(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getX() - distanceBetweenCircles / 2);
+                                    mPlayer.movePlayer(PlayerMoves.LEFT);
+                                } else {
+                                    playerMovesQueue.remove();
+                                    mPlayer.setCurrentMove(PlayerMoves.NONE);
+                                }
+                                break;
+                            case RIGHT:
+                                if (!(mPlayer.getCurrentX() >= mDotsGrid.widthDots() - 1)) {
+                                    mPlayer.setCurrentX(mPlayer.getCurrentX() + 1);
+                                    mPlayer.setDestinationX(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getX() - distanceBetweenCircles / 2);
+                                    mPlayer.movePlayer(PlayerMoves.RIGHT);
+                                } else {
+                                    playerMovesQueue.remove();
+                                    mPlayer.setCurrentMove(PlayerMoves.NONE);
+
+                                }
+                                break;
+                        }
+                    }
+                } else {
+                    // playerMovesQueue.add(PlayerMoves.NONE);
+                }
                 if (mPlayer.isMoving() && !mPlayer.isMovingFinished()) {
-                    switch (mPlayer.getCurrentMove()) {
+                    switch (playerMovesQueue.peek()) {
                         case UP:
                             if (mPlayer.getY() > mPlayer.getDestinationY()) {
-                                int temptY = mPlayer.getY();
-                                mPlayer.setY(temptY - 5);
+                                //mPlayer.setY(mPlayer.getY() - (distanceBetweenCircles/mPlayer.getMovementFrames())*mPlayer.getNumFrames());
+                                mPlayer.setY(mPlayer.getY() - player_shift_faze);
                             } else {
-                                int tempY = mPlayer.getDestinationY();
+                                float tempY = mPlayer.getDestinationY();
                                 mPlayer.setY(tempY);
                                 mPlayer.setIsMoving(false);
                                 mPlayer.setIsMovingFinished(true);
                                 mPlayer.setCurrentMove(PlayerMoves.NONE);
+                                mPlayer.setNumFrames(0);
+                                playerMovesQueue.remove();
                             }
                             break;
                         case DOWN:
                             if (mPlayer.getY() < mPlayer.getDestinationY()) {
-                                int temptY = mPlayer.getY();
-                                mPlayer.setY(temptY + 5);
+                                float temptY = mPlayer.getY();
+                                mPlayer.setY(temptY + player_shift_faze);
                             } else {
-                                int tempY = mPlayer.getDestinationY();
+                                float tempY = mPlayer.getDestinationY();
                                 mPlayer.setY(tempY);
                                 mPlayer.setIsMoving(false);
                                 mPlayer.setIsMovingFinished(true);
                                 mPlayer.setCurrentMove(PlayerMoves.NONE);
+                                playerMovesQueue.remove();
                             }
                             break;
                         case LEFT:
                             if (mPlayer.getX() > mPlayer.getDestinationX()) {
-                                int temptX = mPlayer.getX();
-                                mPlayer.setX(temptX - 5);
+                                float temptX = mPlayer.getX();
+                                mPlayer.setX(temptX - player_shift_faze);
                             } else {
-                                int tempX = mPlayer.getDestinationX();
+                                float tempX = mPlayer.getDestinationX();
                                 mPlayer.setX(tempX);
                                 mPlayer.setIsMoving(false);
                                 mPlayer.setIsMovingFinished(true);
                                 mPlayer.setCurrentMove(PlayerMoves.NONE);
+                                playerMovesQueue.remove();
                             }
                             break;
                         case RIGHT:
                             if (mPlayer.getX() < mPlayer.getDestinationX()) {
-                                int temptX = mPlayer.getX();
-                                mPlayer.setX(temptX + 5);
+                                float temptX = mPlayer.getX();
+                                mPlayer.setX(temptX + player_shift_faze);
                             } else {
-                                int tempX = mPlayer.getDestinationX();
+                                float tempX = mPlayer.getDestinationX();
                                 mPlayer.setX(tempX);
                                 mPlayer.setIsMoving(false);
                                 mPlayer.setIsMovingFinished(true);
                                 mPlayer.setCurrentMove(PlayerMoves.NONE);
+                                playerMovesQueue.remove();
                             }
                             break;
                         case NONE:
@@ -440,39 +439,8 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                     }
 
                 } else {
-                   // mCircleTimer.changeColor(mEliminationGameMode.getCurrentLevel());
-                    //mCircleTimer.setIsRunning(true);
-                    //mCircleTimer.start(25);
                     isLost = true;
                 }
-//
-            /*
-            if (mPlayer.getCheckColors()) {
-                if (mPlayer.getColor() == mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).getColor()) {
-                    //does the player color match the correct color in the sequence?
-                    if (mPlayer.getColor() == mEliminationGameMode.getColorAt(player_color_position)) {
-                        score += 3;
-                    } else {
-
-                    }
-                    /*
-                    int[] tempArray = mEliminationGameMode.getColors();
-                    for (int i = 0; i < tempArray.length; i++) {
-                        if (tempArray[i] == mPlayer.getColor()) {
-                            score *= 2;
-                        }
-                    }
-
-                    mPlayer.setColor(mPlayer.generateColor());
-                    mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).setColor(mDotsGrid.getDotObject(mPlayer.getCurrentX(), mPlayer.getCurrentY()).generateColor());
-                    score++;
-                    mPlayer.setCheckColors(false);
-                } else {
-                    score--;
-                    mPlayer.setCheckColors(false);
-                }
-            }
-            */
             } else {
 
             }

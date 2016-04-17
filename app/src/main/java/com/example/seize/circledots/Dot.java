@@ -1,12 +1,9 @@
 package com.example.seize.circledots;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.annotation.ColorInt;
 
 import java.util.Random;
 
@@ -15,7 +12,8 @@ import java.util.Random;
  */
 public class Dot implements ColorArrayPallete, ObjectCoordinates {
     private int selectedColor;
-    private int x, y, radius;
+    private float x, y;
+    private int radius;
     private Paint mPaint;
     private Context context;
 
@@ -61,22 +59,22 @@ public class Dot implements ColorArrayPallete, ObjectCoordinates {
     }
 
     @Override
-    public int getX() {
+    public float getX() {
         return this.x;
     }
 
     @Override
-    public int getY() {
+    public float getY() {
         return this.y;
     }
 
     @Override
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
     @Override
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 

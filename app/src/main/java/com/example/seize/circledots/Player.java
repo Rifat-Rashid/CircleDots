@@ -9,14 +9,13 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 
-import java.io.BufferedReader;
 import java.util.Random;
 
 /**
  * Created by Rifat Rashid on 4/4/2016.
  */
 public class Player implements ColorArrayPallete, ObjectCoordinates {
-    private int x, y;
+    private float x, y;
     private int width, height;
     private Paint eraser;
     private Context context;
@@ -29,23 +28,25 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     private boolean isMovingFinished = true;
     private int oldX = 0;
     private PlayerMoves currentMove = PlayerMoves.NONE;
-    private int destinationX, destinationY;
+    private float destinationX, destinationY;
     private int currentX = 3;
     private int currentY = 3;
     private boolean checkColors = false;
+    private int numFrames = 0;
+    private final int movementFrames = 40;
 
 
     public Player() {
 
     }
 
-    public Player(int x, int y, int width, int height, int circle_radius, Context context) {
+    public Player(float x, float y, float width, float height, int circle_radius, Context context) {
         this.x = x;
         this.y = y;
         this.destinationX = x;
         this.destinationY = y;
-        this.width = width;
-        this.height = height;
+        this.width = (int)width;
+        this.height = (int)height;
         this.circle_radius = circle_radius;
         this.context = context;
         setUpPaintStack();
@@ -82,6 +83,18 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
         this.setIsMovingFinished(false);
     }
 
+    public int getNumFrames() {
+        return numFrames;
+    }
+
+    public void setNumFrames(int numFrames) {
+        this.numFrames = numFrames;
+    }
+
+    public int getMovementFrames() {
+        return movementFrames;
+    }
+
     public boolean getCheckColors(){
         return this.checkColors;
     }
@@ -106,19 +119,19 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
         this.currentY = currentY;
     }
 
-    public int getDestinationX(){
+    public float getDestinationX(){
         return this.destinationX;
     }
 
-    public int getDestinationY(){
+    public float getDestinationY(){
         return this.destinationY;
     }
 
-    public void setDestinationX(int destinationX){
+    public void setDestinationX(float destinationX){
         this.destinationX = destinationX;
     }
 
-    public void setDestinationY(int destinationY){
+    public void setDestinationY(float destinationY){
         this.destinationY = destinationY;
     }
 
@@ -144,12 +157,12 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     }
 
     @Override
-    public int getX() {
+    public float getX() {
         return this.x;
     }
 
     @Override
-    public int getY() {
+    public float getY() {
         return this.y;
     }
 
@@ -162,12 +175,12 @@ public class Player implements ColorArrayPallete, ObjectCoordinates {
     }
 
     @Override
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
     @Override
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 

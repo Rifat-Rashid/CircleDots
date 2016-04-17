@@ -4,11 +4,11 @@ package com.example.seize.circledots;
  * Created by Seize on 3/30/2016.
  */
 public interface ObjectCoordinates {
-    public int getX();
+    public float getX();
 
-    public int getY();
+    public float getY();
 
-    public void setX(int x);
+    public void setX(float x);
 
-    public void setY(int y);
+    public void setY(float y);
 }

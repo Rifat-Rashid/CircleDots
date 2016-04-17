@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit;
  * Created by Seize on 4/7/2016.
  */
 public class CircleTimer implements ObjectCoordinates {
-    private int x, y, radius;
+    private float x, y;
+    private int radius;
     private float sweepAngle, startAngle;
     private Paint mPaint;
     private Paint sPaint;
@@ -25,7 +26,6 @@ public class CircleTimer implements ObjectCoordinates {
     private Context context;
     private int seconds;
     private Typeface FONT_PROXIMA_NOVA_LIGHT;
-    private Rect rect;
     private RectF rectF;
     private String indicator;
     private int secondsGoneBy = 0;
@@ -46,8 +46,7 @@ public class CircleTimer implements ObjectCoordinates {
         this.sweepAngle = sweepAngle;
         this.context = context;
         this.FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(this.context.getAssets(), "fonts/ProximaNova-Regular.otf");
-        this.rect = new Rect(this.x - this.radius, this.y - this.radius, this.x + this.radius, this.y + this.radius);
-        this.rectF = new RectF(this.rect);
+        this.rectF = new RectF(this.x - this.radius, this.y - this.radius, this.x + this.radius, this.y + this.radius);
         setupPaintStack();
     }
 
@@ -62,7 +61,6 @@ public class CircleTimer implements ObjectCoordinates {
 
     public void Draw(Canvas canvas) {
         //api 21. Worry about this later!
-        indicator = String.valueOf(secondsGoneBy);
         canvas.drawText(indicator, rectF.left + this.radius - (textPaint.measureText(indicator, 0, indicator.length())) / 2, rectF.top + this.radius + (textPaint.descent() - textPaint.ascent()) / 4, textPaint);
         canvas.drawArc(this.x - this.radius, this.y - this.radius, this.x + radius, this.y + radius, 270, 360, false, this.sPaint);
         canvas.drawArc(this.x - this.radius, this.y - this.radius, this.x + radius, this.y + radius, this.startAngle, this.sweepAngle, false, this.mPaint);
@@ -110,22 +108,22 @@ public class CircleTimer implements ObjectCoordinates {
     }
 
     @Override
-    public int getX() {
+    public float getX() {
         return this.x;
     }
 
     @Override
-    public int getY() {
+    public float getY() {
         return this.y;
     }
 
     @Override
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
     @Override
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
@@ -181,6 +179,7 @@ public class CircleTimer implements ObjectCoordinates {
     public void drawProgress(float progress) {
         this.sweepAngle = -(360 - (360 * progress));
         this.secondsGoneBy = (int) (seconds - (seconds * progress));
+        indicator = String.valueOf(secondsGoneBy);
         if (this.secondsGoneBy <= 0) {
             this.isTimerRunning = false;
         }
