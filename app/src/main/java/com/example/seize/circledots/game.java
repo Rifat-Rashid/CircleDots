@@ -12,8 +12,10 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.LinkedList;
@@ -48,6 +50,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public Queue<PlayerMoves> playerMovesQueue;
     public String tempScore;
     public float player_shift_faze = 0;
+    public static int score_multiplier = 1;
+    public GameLostFragment mGameLostFragment;
+    public View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         getWindow().setFlags(0xFFFFFFFF, WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         setContentView(R.layout.game);
+        view = (View) findViewById(R.id.view);
+        view.setVisibility(View.GONE);
+        //imageView.setEnabled(false);
         FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(getAssets(), "fonts/ProximaNova-Regular.otf");
 
         _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
@@ -199,11 +207,11 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 mPaint.setColor(Color.parseColor("#95a5a6"));
                 mPaint.setTextSize(SCORE_FONT_SIZE);
                 mCircleTimer = new CircleTimer(2 * dotSize + dotSize * 4, 2 * dotSize + dotSize * 4, dotSize * 4, 270f, 360f, getApplicationContext());
-                mCircleTimer.start(100);
+                mCircleTimer.start(60);
                 mEliminationGameMode = new EliminationGameMode(getApplicationContext());
                 mEliminationGameMode.startElimenationGameMode();
                 mPlayer.setColor(mEliminationGameMode.getColorAt(0));
-                player_shift_faze = 6;
+                player_shift_faze = 5;
 
             }
         }
@@ -222,6 +230,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             return resizedBitmap;
         }
 
+        /*
+        function: Game loop that updates physics engine and draw
+        calls gamePhysicsThread.update() and doDraw(c)
+         */
         public void run() {
             long ticksFPS = 1000 / FPS_GAME;
             long startTime;
@@ -234,7 +246,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 //       fpg = 0;
                 //        sT = System.currentTimeMillis();
                 //    } else {
-//
+                //
                 //     }
                 Canvas c = null;
                 try {
@@ -269,6 +281,10 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
             }
         }
 
+        /*
+        @Param Canvas
+        function: draws all objects to screen
+         */
         private void doDraw(final Canvas canvas) {
             if (run) {
                 canvas.save();
@@ -283,6 +299,13 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                 //shade the background
                 if (isLost) {
                     canvas.drawColor(Color.parseColor("#78000000"));
+                    game.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.setVisibility(View.VISIBLE);
+
+                        }
+                    });
                 }
             }
             canvas.restore();
@@ -292,7 +315,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     class GamePhysicsThread {
 
         public GamePhysicsThread() {
-            //new fpsThread();
+
         }
 
         public void update() {
@@ -423,10 +446,11 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                                     mDotsGrid.changeGridColors();
                                     player_color_position = 0;
                                     mPlayer.setColor(mEliminationGameMode.getColorAt(player_color_position));
-                                    score += 3;
+                                    score += 3*score_multiplier;
+                                    score_multiplier++;
                                 } else {
                                     mPlayer.setColor(mEliminationGameMode.getColorAt(player_color_position + 1));
-                                    score += 3;
+                                    score += 3*score_multiplier;
                                     player_color_position++;
                                 }
                             }
@@ -434,6 +458,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                             //reset score
                             score = 0;
                             isLost = true;
+
                         }
                         mPlayer.setCheckColors(false);
                     }

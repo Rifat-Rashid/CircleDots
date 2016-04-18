@@ -17,7 +17,7 @@ public class EliminationGameMode implements ColorArrayPallete {
     private int color;
     private Context context;
     private HashMap<Integer, int[]> hashMap;
-    final int NUMBER_OF_GENERATED_LEVELS = 4;
+    final int NUMBER_OF_GENERATED_LEVELS = 15;
     private boolean isLost = false;
     private int currentLevel;
     private Dot[] mDots;
@@ -161,5 +161,10 @@ public class EliminationGameMode implements ColorArrayPallete {
 
     public boolean getIsLost(){
         return this.isLost;
+    }
+
+    @Override
+    public String toString(){
+        return "";
     }
 }

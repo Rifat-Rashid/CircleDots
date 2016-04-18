@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".game"
-            android:hardwareAccelerated="true"/>
+        android:hardwareAccelerated="true"/>
     </application>
 
 </manifest>
