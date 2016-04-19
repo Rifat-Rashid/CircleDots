@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.LinkedList;
@@ -55,6 +56,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public GameLostFragment mGameLostFragment;
     public View view;
     public SharedPreferences prefs;
+    public TextView t1, t2, t3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,13 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         view.setVisibility(View.GONE);
         //imageView.setEnabled(false);
         FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(getAssets(), "fonts/ProximaNova-Regular.otf");
+        t1 = (TextView) findViewById(R.id.ach_textview);
+        t2 = (TextView) findViewById(R.id.play_textview);
+        t3 = (TextView) findViewById(R.id.rank_textview);
+
+        t1.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+        t2.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+        t3.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
 
         _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         _surfaceHolder = _surfaceView.getHolder();

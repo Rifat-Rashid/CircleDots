@@ -68,6 +68,7 @@
         android:layout_alignBottom="@+id/ach_textview"
         android:layout_alignRight="@+id/imageButton"
         android:layout_alignEnd="@+id/imageButton"
+        android:layout_marginTop="8dp"
         android:textAlignment="center" />
 
     <TextView
@@ -83,6 +84,7 @@
         android:layout_alignStart="@+id/imageButton2"
         android:layout_alignRight="@+id/imageButton2"
         android:layout_alignEnd="@+id/imageButton2"
+        android:layout_marginTop="8dp"
         android:textAlignment="center" />
 
     <TextView
@@ -98,6 +100,7 @@
         android:layout_alignLeft="@+id/imageButton3"
         android:layout_alignStart="@+id/imageButton3"
         android:layout_alignRight="@+id/imageButton3"
+        android:layout_marginTop="8dp"
         android:layout_alignEnd="@+id/imageButton3" />
 
 </RelativeLayout>
