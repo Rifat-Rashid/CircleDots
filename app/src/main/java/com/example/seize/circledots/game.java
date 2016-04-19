@@ -1,6 +1,7 @@
 package com.example.seize.circledots;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -53,6 +54,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public static int score_multiplier = 1;
     public GameLostFragment mGameLostFragment;
     public View view;
+    public SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,11 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         player_color_position = 0;
 
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+
+        prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        System.out.println(prefs.getInt("key", 0));
+
+
     }
 
     //swipe gesture listener
@@ -446,29 +453,43 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                                     mDotsGrid.changeGridColors();
                                     player_color_position = 0;
                                     mPlayer.setColor(mEliminationGameMode.getColorAt(player_color_position));
-                                    score += 3*score_multiplier;
+                                    score += 3 * score_multiplier;
                                     score_multiplier++;
                                 } else {
                                     mPlayer.setColor(mEliminationGameMode.getColorAt(player_color_position + 1));
-                                    score += 3*score_multiplier;
+                                    score += 3 * score_multiplier;
                                     player_color_position++;
                                 }
                             }
                         } else {
-                            //reset score
-                            score = 0;
-                            isLost = true;
-
+                            endGame();
                         }
                         mPlayer.setCheckColors(false);
                     }
 
                 } else {
-                    isLost = true;
+                    endGame();
                 }
             } else {
 
             }
         }
+    }
+
+    /*
+    @Param none;
+    Store high score in SharedPreferences
+    Condition: if score > oldScore
+     */
+    public void endGame() {
+        SharedPreferences.Editor editor = prefs.edit();
+        int oldScore = prefs.getInt("key", 0);
+        if (score > oldScore) {
+            editor.putInt("key", score);
+            editor.apply();
+        }
+        score = 0;
+        score_multiplier = 1;
+        isLost = true;
     }
 }

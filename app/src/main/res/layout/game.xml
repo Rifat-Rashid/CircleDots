@@ -21,26 +21,38 @@
     </View>
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:id="@+id/imageButton"
-        android:src="@drawable/restart"
+        android:src="@drawable/play_button_image"
         android:background="#00000000"
+        android:scaleType="fitXY"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/view"
-        android:layout_alignEnd="@+id/view"
-        android:layout_marginBottom="154dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="46dp" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/imageButton2"
-        android:src="@drawable/achievements"
+        android:scaleType="fitXY"
+        android:src="@drawable/rank_button_image"
         android:background="#00000000"
-        android:layout_alignTop="@+id/imageButton"
+        android:layout_marginLeft="10dp"
+        android:layout_alignBottom="@+id/imageButton"
+        android:layout_toRightOf="@+id/imageButton"
+        android:layout_toEndOf="@+id/imageButton" />
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/imageButton3"
+        android:background="#00000000"
+        android:src="@drawable/achievements_button_image"
+        android:scaleType="fitXY"
+        android:layout_alignBottom="@+id/imageButton"
         android:layout_toLeftOf="@+id/imageButton"
-        android:layout_toStartOf="@+id/imageButton"
-        android:layout_marginRight="24dp"
-        android:layout_marginEnd="6dp" />
+        android:layout_marginRight="10dp"
+        android:layout_toStartOf="@+id/imageButton" />
 
 </RelativeLayout>
