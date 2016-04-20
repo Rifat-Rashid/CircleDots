@@ -43,7 +43,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     static float distanceBetweenCircles = 0;
     public Display display;
     public Paint mPaint;
-    public int score = 0;
+    public static int score = 0;
     public static final float SCORE_FONT_SIZE = 75f;
     public Typeface FONT_PROXIMA_NOVA_LIGHT;
     public CircleTimer mCircleTimer;
@@ -61,6 +61,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public SharedPreferences prefs;
     public TextView t1, t2, t3;
     private ImageButton i1, i2, i3;
+    private TextView scoreTV, gameScoreText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +74,16 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         view.setVisibility(View.GONE);
         //imageView.setEnabled(false);
         FONT_PROXIMA_NOVA_LIGHT = Typeface.createFromAsset(getAssets(), "fonts/ProximaNova-Regular.otf");
+        scoreTV = (TextView) findViewById(R.id.score_tv);
+        gameScoreText = (TextView) findViewById(R.id.gamescore_textview);
+        scoreTV.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
+        gameScoreText.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
         t1 = (TextView) findViewById(R.id.ach_textview);
         t2 = (TextView) findViewById(R.id.play_textview);
         t3 = (TextView) findViewById(R.id.rank_textview);
+
+        scoreTV.setVisibility(View.GONE);
+        gameScoreText.setVisibility(View.GONE);
 
         t1.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
         t2.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
@@ -84,6 +92,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         i1 = (ImageButton) findViewById(R.id.imageButton);
         i2 = (ImageButton) findViewById(R.id.imageButton2);
         i3 = (ImageButton) findViewById(R.id.imageButton3);
+
         try{
             onLaunch.mGoogleApiClient.connect();
         }catch (Exception e){
@@ -93,7 +102,9 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         i1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                hideExtraObjects();
+                isLost = false;
+                thread.doStart();
             }
         });
 
@@ -117,7 +128,17 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         i3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                try {
+                    if (mGoogleApiClient.isConnected()) {
+                        startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), 1);
+                    } else if (!mGoogleApiClient.isConnected()) {
+                        //Error with connecting to leaderboards
+                        onLaunch.mGoogleApiClient.connect();
+                        System.out.println("Could not start leaderboards Intent");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -130,11 +151,30 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         player_color_position = 0;
 
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
         prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
         System.out.println(prefs.getInt("key1", 0));
+    }
 
+    public void hideExtraObjects(){
+        i1.setVisibility(View.GONE);
+        i2.setVisibility(View.GONE);
+        i3.setVisibility(View.GONE);
+        t1.setVisibility(View.GONE);
+        t2.setVisibility(View.GONE);
+        t3.setVisibility(View.GONE);
+        scoreTV.setVisibility(View.INVISIBLE);
+        gameScoreText.setVisibility(View.INVISIBLE);
+    }
 
+    public void showExtraObjects(){
+        i1.setVisibility(View.VISIBLE);
+        i2.setVisibility(View.VISIBLE);
+        i3.setVisibility(View.VISIBLE);
+        t1.setVisibility(View.VISIBLE);
+        t2.setVisibility(View.VISIBLE);
+        t3.setVisibility(View.VISIBLE);
+        scoreTV.setVisibility(View.VISIBLE);
+        gameScoreText.setVisibility(View.VISIBLE);
     }
 
     //swipe gesture listener
@@ -363,7 +403,6 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
                         @Override
                         public void run() {
                             view.setVisibility(View.VISIBLE);
-
                         }
                     });
                 }
@@ -535,6 +574,14 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     Condition: if score > oldScore
      */
     public void endGame() {
+        game.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                gameScoreText.setText(String.valueOf(score));
+                gameScoreText.setVisibility(View.VISIBLE);
+                gameScoreText.invalidate();
+            }
+        });
         SharedPreferences.Editor editor = prefs.edit();
         int oldScore = prefs.getInt("key1", 0);
         if (score > oldScore) {
@@ -546,6 +593,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
 
             }
         }
+        showExtraObjects();
         score = 0;
         score_multiplier = 1;
         isLost = true;
