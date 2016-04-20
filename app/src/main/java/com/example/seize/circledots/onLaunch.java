@@ -31,7 +31,7 @@ import me.relex.circleindicator.CircleIndicator;
 public class onLaunch extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private Button mLaunchButton;
-    private GoogleApiClient mGoogleApiClient;
+    static GoogleApiClient mGoogleApiClient;
     private boolean mResolvingError = false;
     private static final int REQUEST_RESOLVE_ERROR = 1001;
     ViewPager defaultViewPager;
@@ -74,7 +74,7 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
         mLaunchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mGoogleApiClient.connect();
+                mGoogleApiClient.connect();
                 Intent i = new Intent(onLaunch.this, game.class);
                 startActivity(i);
             }
@@ -140,6 +140,7 @@ public class onLaunch extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     public void onConnected(Bundle bundle) {
         System.out.println("Connected!");
+
     }
 
     @Override

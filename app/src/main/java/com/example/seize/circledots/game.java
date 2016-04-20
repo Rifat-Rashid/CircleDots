@@ -16,9 +16,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.games.Games;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -57,6 +60,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
     public View view;
     public SharedPreferences prefs;
     public TextView t1, t2, t3;
+    private ImageButton i1, i2, i3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,46 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         t2.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
         t3.setTypeface(FONT_PROXIMA_NOVA_LIGHT);
 
+        i1 = (ImageButton) findViewById(R.id.imageButton);
+        i2 = (ImageButton) findViewById(R.id.imageButton2);
+        i3 = (ImageButton) findViewById(R.id.imageButton3);
+        try{
+            onLaunch.mGoogleApiClient.connect();
+        }catch (Exception e){
+
+        }
+
+        i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        i2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    if (mGoogleApiClient.isConnected()) {
+                        startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient), 1);
+                    } else if (!mGoogleApiClient.isConnected()) {
+                        //Error with connecting to leaderboards
+                        onLaunch.mGoogleApiClient.connect();
+                        System.out.println("Could not start leaderboards Intent");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        i3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         _surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         _surfaceHolder = _surfaceView.getHolder();
         _surfaceHolder.addCallback(this);
@@ -88,7 +132,7 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
         prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
-        System.out.println(prefs.getInt("key", 0));
+        System.out.println(prefs.getInt("key1", 0));
 
 
     }
@@ -492,10 +536,15 @@ public class game extends onLaunch implements SurfaceHolder.Callback {
      */
     public void endGame() {
         SharedPreferences.Editor editor = prefs.edit();
-        int oldScore = prefs.getInt("key", 0);
+        int oldScore = prefs.getInt("key1", 0);
         if (score > oldScore) {
-            editor.putInt("key", score);
+            editor.putInt("key1", score);
             editor.apply();
+            try{
+                Games.Leaderboards.submitScore(mGoogleApiClient, "CgkIqd7QlfQZEAIQAQ", score);
+            }catch (Exception e){
+
+            }
         }
         score = 0;
         score_multiplier = 1;

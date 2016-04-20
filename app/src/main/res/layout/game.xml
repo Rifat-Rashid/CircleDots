@@ -13,7 +13,6 @@
     <View android:layout_width="300dp"
         android:layout_height="200dp"
         android:id="@+id/view"
-        android:background="@drawable/rounded_edges_game"
         android:layout_gravity="center"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
@@ -29,7 +28,7 @@
         android:scaleType="fitXY"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="46dp" />
+        android:layout_marginBottom="65dp" />
 
     <ImageButton
         android:layout_width="60dp"
@@ -102,5 +101,26 @@
         android:layout_alignRight="@+id/imageButton3"
         android:layout_marginTop="8dp"
         android:layout_alignEnd="@+id/imageButton3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score"
+        android:id="@+id/score_tv"
+        android:textSize="25dp"
+        android:textColor="#bdc3c7"
+        android:layout_above="@+id/gamescore_textview"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="1337"
+        android:id="@+id/gamescore_textview"
+        android:textColor="#FFFFFF"
+        android:textSize="50dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
